@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\AuthData.cs" />
-    <Compile Include="DataSerialezer.cs" />
+    <Compile Include="Utils\DataSerialezer.cs" />
     <Compile Include="Errors\Error.cs" />
     <Compile Include="Errors\ErrorResponse.cs" />
     <Compile Include="Friends\Friend.cs" />
@@ -53,7 +53,7 @@
     <Compile Include="Friends\FriendsData.cs" />
     <Compile Include="Friends\FriendsResponse.cs" />
     <Compile Include="Friends\GetFriends.cs" />
-    <Compile Include="IVkResponse.cs" />
+    <Compile Include="Interfaces\IVkResponse.cs" />
     <Compile Include="Messages\ChatSettings.cs" />
     <Compile Include="Messages\Conversation.cs" />
     <Compile Include="Messages\Dialog.cs" />
@@ -61,7 +61,7 @@
     <Compile Include="Messages\DialogsResponse.cs" />
     <Compile Include="Messages\Filters.cs" />
     <Compile Include="Messages\GetConversations.cs" />
-    <Compile Include="IVkApiMethod.cs" />
+    <Compile Include="Interfaces\IVkApiMethod.cs" />
     <Compile Include="Messages\DialogsData.cs" />
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\Peer.cs" />
@@ -72,6 +72,7 @@
     <Compile Include="Users\LastOnline.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserResponse.cs" />
+    <Compile Include="Utils\VkDateTime.cs" />
     <Compile Include="VkClient.cs" />
     <Compile Include="VkRequest.cs" />
     <Compile Include="VkResponse.cs" />

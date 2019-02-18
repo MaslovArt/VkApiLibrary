@@ -4,20 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VkApiSDK.Utils;
 
 namespace VkApiSDK.Messages
 {
     public class Message
     {
-        private DateTime data;
+        private VkDateTime data;
 
         [JsonProperty("date")]
         public string Data
         {
-            get { return data.ToShortDateString(); }
+            get { return data.DayTimeOrDayMonthTime; }
             set
             {
-                data = new DateTime(Convert.ToInt64(value));
+                data = new VkDateTime(Convert.ToInt64(value));
             }
         }
 

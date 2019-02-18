@@ -7,6 +7,7 @@ using VkApiSDK.Messages;
 using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Errors;
+using VkApiSDK.Utils;
 
 namespace VkApiSDK
 {
@@ -28,6 +29,10 @@ namespace VkApiSDK
             _vkRequest = new VkRequest();
         }
 
+        /// <summary>
+        /// Авторизация
+        /// </summary>
+        /// <returns></returns>
         public async Task AuthAsync()
         {
             var wasLoad = await DataSerialezer.LoadInfo(out _authData, AUTH_DATA_FILE);
@@ -39,27 +44,38 @@ namespace VkApiSDK
             }
         }
 
-        public async Task<DialogsData> GetDialogs(int count = 20, int offset = -1)
+        /// <summary>
+        /// Получает список диалогов
+        /// </summary>
+        /// <param name="count">Кол-во диалогов в запросе</param>
+        /// <param name="offset">Смещение для получения данных</param>
+        /// <returns></returns>
+        public async Task<DialogsData> GetDialogs(int count = 20, int offset = 0)
         {
-            if (offset > 0)
-                messageOffset = offset;
-
             var result = await _vkRequest.Dispath<DialogsResponse>(
                 new GetConversations(_authData.AccessToken)
                 {
                     Count = count,
-                    Offset = messageOffset
+                    Offset = offset
                 });
 
             return result.DialogsData;
         }
 
-        public async Task<FriendsData> GetFriends()
+        /// <summary>
+        /// Получает список друзей
+        /// </summary>
+        /// <param name="count">Кол-во друзей в запросе</param>
+        /// <param name="offset">Смещение для получения данных</param>
+        /// <returns>Друзей пользователя</returns>
+        public async Task<FriendsData> GetFriends(int count = 5000, int offset = 0)
         {
             var result = await _vkRequest.Dispath<FriendsResponse>(
                 new GetFriends(_authData.AccessToken)
                 {
-                    UserID = _authData.UserID
+                    UserID = _authData.UserID,
+                    Count = count,
+                    Offset = offset
                 });
 
             return result.FriendsData;
@@ -81,10 +97,23 @@ namespace VkApiSDK
             return result.Users;
         }
 
-        public async Task<DialogRenderData> GetNextDialogsRenderData(int count = 20)
+
+        public async Task<DialogRenderData[]> GetNextDialogsRenderData(int count = 20)
         {
             var dialogs = await GetDialogs(count);
             messageOffset += 20;
+            var userIDs = getUserIDs(dialogs);
+            var users = await GetUsers(userIDs);
+
+            var result = new DialogRenderData[dialogs.Dialogs.Count()];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = new DialogRenderData()
+                {
+                    Type = dialogs.Dialogs[i].Conversation.Peer.Type,
+                    UnreadMsgCount = dialogs.Dialogs[i].Conversation.UnreadCount
+                };
+            }
 
             throw new NotImplementedException();
         }
@@ -95,8 +124,10 @@ namespace VkApiSDK
             List<string> userIDs = new List<string>();
             foreach(Dialog dialog in dd.Dialogs)
             {
-                
+                if (dialog.Conversation.Peer.Type == "user")
+                    userIDs.Add(dialog.Conversation.Peer.ID.ToString());
             }
+            return userIDs.ToArray();
         }
     }
 }

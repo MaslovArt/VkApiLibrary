@@ -1,26 +1,23 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using VkApiSDK.Utils;
 
 namespace VkApiSDK.Users
 {
     public class LastOnline
     {
-        private DateTime date;
+        private VkDateTime date;
 
         [JsonProperty("time")]
         public string Time
         {
             get
             {
-                return date.ToShortDateString();
+                return date.DayTimeOrDayMonthTime;
             }
             set
             {
-                date = new DateTime(Convert.ToInt64(value));
+                date = new VkDateTime(Convert.ToInt64(value));
             }
         }
 
