@@ -25,7 +25,7 @@ namespace VkApiSDK.Users
         /// <summary>
         /// Cписок дополнительных полей профилей, которые необходимо вернуть.
         /// </summary>
-        public string Fields { get; set; } = "photo_50";
+        public string Fields { get; set; } = "photo_50,last_seen";
 
         public string GetRequestString()
         {

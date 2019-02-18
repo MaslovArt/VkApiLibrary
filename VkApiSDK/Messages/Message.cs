@@ -13,7 +13,7 @@ namespace VkApiSDK.Messages
         private VkDateTime data;
 
         [JsonProperty("date")]
-        public string Data
+        public string Date
         {
             get { return data.DayTimeOrDayMonthTime; }
             set

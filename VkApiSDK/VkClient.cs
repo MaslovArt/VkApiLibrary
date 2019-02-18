@@ -13,6 +13,8 @@ namespace VkApiSDK
 {
     public class VkClient
     {
+        #region Variables
+
         private AuthData _authData;
         private string token = "";
         private const string AUTH_DATA_FILE = "authData.dat";
@@ -21,13 +23,25 @@ namespace VkApiSDK
 
         private VkRequest _vkRequest;
 
+        #endregion
+
+        #region Events
+
         public event Action<Error> OnAccessDenied;
         //ToDo another error events
+
+        #endregion
 
         public VkClient()
         {
             _vkRequest = new VkRequest();
         }
+
+        #region Properties
+
+        #endregion
+
+        #region Vk api methods
 
         /// <summary>
         /// Авторизация
@@ -59,7 +73,7 @@ namespace VkApiSDK
                     Offset = offset
                 });
 
-            return result.DialogsData;
+            return result != null ? result.DialogsData : null;
         }
 
         /// <summary>
@@ -78,7 +92,7 @@ namespace VkApiSDK
                     Offset = offset
                 });
 
-            return result.FriendsData;
+            return result != null ? result.FriendsData : null;
         }
 
         /// <summary>
@@ -94,30 +108,70 @@ namespace VkApiSDK
                     UserIDs = userIDs
                 });
 
-            return result.Users;
+            return result != null ? result.Users : null;
         }
 
+        #endregion
 
+        #region SDK api
+
+        /// <summary>
+        /// Получает необходимые для отображения диалога данные.
+        /// </summary>
+        /// <param name="count">Кол-во диалогов</param>
+        /// <returns>Диалоги</returns>
         public async Task<DialogRenderData[]> GetNextDialogsRenderData(int count = 20)
         {
-            var dialogs = await GetDialogs(count);
-            messageOffset += 20;
+            var dialogs = await GetDialogs(count, messageOffset);
             var userIDs = getUserIDs(dialogs);
             var users = await GetUsers(userIDs);
 
+            DialogRenderData[] result = GetDialogsRenderData(dialogs, users);
+
+            messageOffset += count;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Обнулет смещение для получения диалогов.
+        /// </summary>
+        public void ClearMessageOffset()
+        {
+            messageOffset = 0;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private DialogRenderData[] GetDialogsRenderData(DialogsData dialogs, User[] users)
+        {
             var result = new DialogRenderData[dialogs.Dialogs.Count()];
             for (int i = 0; i < result.Length; i++)
             {
+                string peerName = "";
+
+                if (dialogs.Dialogs[i].Conversation.Peer.Type == "chat")
+                    peerName = dialogs.Dialogs[i].Conversation.ChatSettings.Title;
+
+                else if (dialogs.Dialogs[i].Conversation.Peer.Type == "user")
+                    peerName = users.Where(o => o.ID == dialogs.Dialogs[i].Conversation.Peer.ID)
+                                    .Select(o => o.FullName)
+                                    .FirstOrDefault();
+
                 result[i] = new DialogRenderData()
                 {
                     Type = dialogs.Dialogs[i].Conversation.Peer.Type,
-                    UnreadMsgCount = dialogs.Dialogs[i].Conversation.UnreadCount
+                    UnreadMsgCount = dialogs.Dialogs[i].Conversation.UnreadCount,
+                    LastMessage = dialogs.Dialogs[i].Message.Text,
+                    DialogTime = dialogs.Dialogs[i].Message.Date,
+                    PeerName = peerName
                 };
             }
 
-            throw new NotImplementedException();
+            return result;
         }
-
 
         private string[] getUserIDs(DialogsData dd)
         {
@@ -129,5 +183,7 @@ namespace VkApiSDK
             }
             return userIDs.ToArray();
         }
+
+        #endregion
     }
 }

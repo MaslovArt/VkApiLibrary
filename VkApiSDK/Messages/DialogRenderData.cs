@@ -21,7 +21,7 @@ namespace VkApiSDK.Messages
         /// <summary>
         /// Время последнего сообщения
         /// </summary>
-        public DateTime DialogTime { get; set; }
+        public string DialogTime { get; set; }
 
         /// <summary>
         /// Тело последнего сообщения

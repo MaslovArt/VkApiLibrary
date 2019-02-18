@@ -19,29 +19,30 @@ namespace VkApiSDK
             client = new HttpClient();
         }
 
-        public event Action<Error> OnRequestError;
-
         /// <summary>
         /// Осуществляет запрос к api
         /// </summary>
         /// <typeparam name="T">Тип ответа</typeparam>
         /// <param name="vkApiMethod">Api метод</param>
         /// <returns>Объект json ответа</returns>
-        public async Task<T> Dispath<T>(IVkApiMethod vkApiMethod) where T : IVkResponse
+        public async Task<T> Dispath<T>(IVkApiMethod vkApiMethod, Action<Error> OnRequestError = null) where T : class, IVkResponse
         {
             string reqUri = vkApiMethod.GetRequestString();
             var responseStringJSON = await client.GetStringAsync(reqUri);
 
             Debug.WriteLine("REqURL " + reqUri);
 
-            T result = default(T);
+            T result = null;
 
             result = JsonConvert.DeserializeObject<T>(responseStringJSON);
 
             if(result.ChechIfResponseNull())
             {
-                var err = JsonConvert.DeserializeObject<ErrorResponse>(responseStringJSON);
-                OnRequestError(err.Error);
+                if (OnRequestError != null)
+                {
+                    var err = JsonConvert.DeserializeObject<ErrorResponse>(responseStringJSON);
+                    OnRequestError(err.Error);
+                }
             }
 
             return result;

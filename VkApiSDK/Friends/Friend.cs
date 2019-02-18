@@ -10,10 +10,6 @@ namespace VkApiSDK.Friends
 {
     public class Friend : User
     {
-        [JsonProperty("domain")]
-        public string Domain { get; set; }
 
-        [JsonProperty("online")]
-        public bool Online { get; set; }
     }
 }
