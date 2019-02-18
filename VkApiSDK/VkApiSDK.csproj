@@ -75,7 +75,6 @@
     <Compile Include="Utils\VkDateTime.cs" />
     <Compile Include="VkClient.cs" />
     <Compile Include="VkRequest.cs" />
-    <Compile Include="VkResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
