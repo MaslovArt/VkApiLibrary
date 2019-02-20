@@ -7,19 +7,26 @@ using System.Threading.Tasks;
 
 namespace VkApiSDK.Friends
 {
-    class GetFriends : IVkApiMethod
+    /// <summary>
+    /// Возвращает список идентификаторов друзей пользователя или расширенную информацию о друзьях пользователя 
+    /// (при использовании параметра fields)
+    /// </summary>
+    public class GetFriends : VkApiMethod
     {
-        private string apiUri = "https://api.vk.com/method/friends.get?access_token={0}&user_id={1}&order={2}&count={3}&offset={4}&fields={5}&v=5.92";
         private int count = 5000,
                     offset = 0;
-        private string[] order = new string[] { "hints", "random", "mobile", "name"};
 
         public GetFriends(string AccessToken)
+            :base(AccessToken)
         {
-            this.AccessToken = AccessToken;
+            VkApiMethodName = "friends.get";
+            Fields = new string[]
+            {
+                ApiField.Photo50,
+                ApiField.LastOnline,
+                ApiField.IsOnline
+            };
         }
-
-        public string AccessToken { get; set; }
 
         /// <summary>
         /// Идентификатор пользователя, для которого необходимо получить список друзей. 
@@ -29,7 +36,7 @@ namespace VkApiSDK.Friends
         /// <summary>
         /// Порядок, в котором нужно вернуть список друзей. 
         /// </summary>
-        public FriendOrder Order { get; set; } = FriendOrder.hints;
+        public string Order { get; set; } = FriendOrder.Hints;
 
         /// <summary>
         /// Количество друзей, которое нужно вернуть.
@@ -61,19 +68,12 @@ namespace VkApiSDK.Friends
             }
         }
 
-        /// <summary>
-        /// список дополнительных полей, которые необходимо вернуть. 
-        /// Доступные значения: nickname, domain, sex, bdate, city, country, timezone, photo_50, photo_100, photo_200_orig, has_mobile, contacts, education, online, relation, last_seen, status, can_write_private_message, can_see_all_posts, can_post, universities
-        /// список слов, разделенных через запятую
-        /// </summary>
-        public string Fields
+        public override string GetMethodApiParams()
         {
-            get; set;
-        } = "photo_50,online,last_seen";
-
-        public string GetRequestString()
-        {
-            return string.Format(apiUri, AccessToken, UserID, order[(int)Order], Count, Offset, Fields);
+             return string.Format("&user_id={0}&order={1}&count={2}&offset={3}", UserID,
+                                                                                 Order,
+                                                                                 Count,
+                                                                                 Offset);
         }
     }
 }

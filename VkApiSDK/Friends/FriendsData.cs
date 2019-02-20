@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VkApiSDK.Users;
 
 namespace VkApiSDK.Friends
 {
@@ -13,6 +14,6 @@ namespace VkApiSDK.Friends
         public int Count { get; set; }
 
         [JsonProperty("items")]
-        public Friend[] Friends { get; set; }
+        public User[] Friends { get; set; }
     }
 }

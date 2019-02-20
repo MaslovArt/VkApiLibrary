@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VkApiSDK.Messages;
 using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Errors;
 using VkApiSDK.Utils;
+using VkApiSDK.Messages.Dialogs;
 
 namespace VkApiSDK
 {
@@ -64,7 +64,7 @@ namespace VkApiSDK
         /// <param name="count">Кол-во диалогов в запросе</param>
         /// <param name="offset">Смещение для получения данных</param>
         /// <returns></returns>
-        public async Task<DialogsData> GetDialogs(int count = 20, int offset = 0)
+        public async Task<DialogsData> GetDialogsAsync(int count = 20, int offset = 0)
         {
             var result = await _vkRequest.Dispath<DialogsResponse>(
                 new GetConversations(_authData.AccessToken)
@@ -82,7 +82,7 @@ namespace VkApiSDK
         /// <param name="count">Кол-во друзей в запросе</param>
         /// <param name="offset">Смещение для получения данных</param>
         /// <returns>Друзей пользователя</returns>
-        public async Task<FriendsData> GetFriends(int count = 5000, int offset = 0)
+        public async Task<FriendsData> GetFriendsAsync(int count = 5000, int offset = 0)
         {
             var result = await _vkRequest.Dispath<FriendsResponse>(
                 new GetFriends(_authData.AccessToken)
@@ -100,16 +100,17 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="userIDs">Набор id</param>
         /// <returns>Информацию о пользователя</returns>
-        public async Task<User[]> GetUsers(params string[] userIDs)
+        public async Task<User[]> GetUsersAsync(params string[] userIDs)
         {
             var result = await _vkRequest.Dispath<UserResponse>(
-                new GetUser(_authData.AccessToken)
+                new GetUsers(_authData.AccessToken)
                 {
                     UserIDs = userIDs
                 });
 
             return result != null ? result.Users : null;
         }
+
 
         #endregion
 
@@ -120,11 +121,11 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="count">Кол-во диалогов</param>
         /// <returns>Диалоги</returns>
-        public async Task<DialogRenderData[]> GetNextDialogsRenderData(int count = 20)
+        public async Task<DialogRenderData[]> GetNextDialogsDataAsync(int count = 20)
         {
-            var dialogs = await GetDialogs(count, messageOffset);
+            var dialogs = await GetDialogsAsync(count, messageOffset);
             var userIDs = getUserIDs(dialogs);
-            var users = await GetUsers(userIDs);
+            var users = await GetUsersAsync(userIDs);
 
             DialogRenderData[] result = GetDialogsRenderData(dialogs, users);
 
@@ -163,6 +164,7 @@ namespace VkApiSDK
                 result[i] = new DialogRenderData()
                 {
                     Type = dialogs.Dialogs[i].Conversation.Peer.Type,
+                    ID = dialogs.Dialogs[i].Conversation.Peer.ID,
                     UnreadMsgCount = dialogs.Dialogs[i].Conversation.UnreadCount,
                     LastMessage = dialogs.Dialogs[i].Message.Text,
                     DialogTime = dialogs.Dialogs[i].Message.Date,

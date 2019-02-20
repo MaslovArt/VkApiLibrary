@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VkApiSDK.Messages
+﻿namespace VkApiSDK.Messages.Dialogs
 {
     public class DialogRenderData
     {
@@ -12,6 +6,11 @@ namespace VkApiSDK.Messages
         /// Тип диалого
         /// </summary>
         public string Type { get; set; }
+
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
 
         /// <summary>
         /// Название диалога или имя пользователя

@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace VkApiSDK.Messages
+namespace VkApiSDK.Messages.Dialogs
 {
-    public class GetConversations : IVkApiMethod
+    /// <summary>
+    /// Возвращает список бесед пользователя.
+    /// </summary>
+    public class GetConversations : VkApiMethod
     {
-        private string   apiUri = "https://api.vk.com/method/messages.getConversations?access_token={0}&offset={1}&count={2}&filter={3}&v=5.92";
-        private string[] availableFilters = new string[] { "all" , "unread", "important", "unanswered" };
-        private int      count = 10,
-                         offset = 0;
+        private int count = 10,
+                    offset = 0;
 
         public GetConversations(string AccessToken)
+            :base(AccessToken)
         {
-            this.AccessToken = AccessToken;
+            VkApiMethodName = "messages.getConversations";
         }
-
-        public string AccessToken { get; set; }
 
         /// <summary>
         /// Cмещение, необходимое для выборки определенного подмножества результатов.
@@ -49,24 +45,26 @@ namespace VkApiSDK.Messages
             }
         }
         /// <summary>
-        /// фильтр.
+        /// фильтр. DialogFIlters.
         /// </summary>
-        public Filters Filter
+        public string Filter
         {
             get; set;
-        } = Filters.All;
+        } = DialogFilter.All;
 
         /// <summary>
-        /// Изменяет смещение на число элементов в запросе.
+        /// Устанавливает смещение для получения следующего набора диалогов.
         /// </summary>
         public void Next()
         {
             Offset += count;
         }
 
-        public string GetRequestString()
+        public override string GetMethodApiParams()
         {
-            return string.Format(apiUri, AccessToken, offset, count, availableFilters[(int)Filter]);
+            return string.Format("&offset={0}&count={1}&filter={2}", offset,
+                                                                     count,
+                                                                     Filter);
         }
     }
 }

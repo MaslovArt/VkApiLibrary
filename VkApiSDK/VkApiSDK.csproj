@@ -44,42 +44,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiField.cs" />
     <Compile Include="Auth\AuthData.cs" />
+    <Compile Include="Messages\Dialogs\DialogFilter.cs" />
     <Compile Include="Utils\DataSerialezer.cs" />
     <Compile Include="Errors\Error.cs" />
     <Compile Include="Errors\ErrorResponse.cs" />
-    <Compile Include="Friends\Friend.cs" />
     <Compile Include="Friends\FriendOrder.cs" />
     <Compile Include="Friends\FriendsData.cs" />
     <Compile Include="Friends\FriendsResponse.cs" />
     <Compile Include="Friends\GetFriends.cs" />
     <Compile Include="Interfaces\IVkResponse.cs" />
-    <Compile Include="Messages\ChatSettings.cs" />
-    <Compile Include="Messages\Conversation.cs" />
-    <Compile Include="Messages\Dialog.cs" />
-    <Compile Include="Messages\DialogRenderData.cs" />
-    <Compile Include="Messages\DialogsResponse.cs" />
-    <Compile Include="Messages\Filters.cs" />
-    <Compile Include="Messages\GetConversations.cs" />
+    <Compile Include="Messages\Dialogs\ChatSettings.cs" />
+    <Compile Include="Messages\Dialogs\Conversation.cs" />
+    <Compile Include="Messages\Dialogs\Dialog.cs" />
+    <Compile Include="Messages\Dialogs\DialogRenderData.cs" />
+    <Compile Include="Messages\Dialogs\DialogsResponse.cs" />
+    <Compile Include="Messages\Dialogs\GetConversations.cs" />
     <Compile Include="Interfaces\IVkApiMethod.cs" />
-    <Compile Include="Messages\DialogsData.cs" />
+    <Compile Include="Messages\Dialogs\DialogsData.cs" />
     <Compile Include="Messages\Message.cs" />
-    <Compile Include="Messages\Peer.cs" />
-    <Compile Include="Messages\Photos.cs" />
+    <Compile Include="Messages\Dialogs\Peer.cs" />
+    <Compile Include="Messages\Dialogs\Photos.cs" />
     <Compile Include="Auth\VkAutharization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Users\GetUser.cs" />
+    <Compile Include="Users\GetUsers.cs" />
     <Compile Include="Users\LastOnline.cs" />
     <Compile Include="Users\User.cs" />
     <Compile Include="Users\UserResponse.cs" />
     <Compile Include="Utils\VkDateTime.cs" />
+    <Compile Include="VkApiMethod.cs" />
     <Compile Include="VkClient.cs" />
     <Compile Include="VkRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Messages\History\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
