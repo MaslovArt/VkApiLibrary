@@ -33,12 +33,5 @@ namespace VkApiSDK.Messages
 
         [JsonProperty("text")]
         public string Text { get; set; }
-
-        [JsonProperty("body")]
-        private string Text2
-        {
-            get { return Text; }
-            set { Text = value; }
-        }
     }
 }

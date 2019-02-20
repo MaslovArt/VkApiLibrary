@@ -47,6 +47,7 @@
     <Compile Include="ApiField.cs" />
     <Compile Include="Auth\AuthData.cs" />
     <Compile Include="Messages\Dialogs\DialogFilter.cs" />
+    <Compile Include="Messages\History\GetDialogHistory.cs" />
     <Compile Include="Utils\DataSerialezer.cs" />
     <Compile Include="Errors\Error.cs" />
     <Compile Include="Errors\ErrorResponse.cs" />
@@ -75,14 +76,13 @@
     <Compile Include="Utils\VkDateTime.cs" />
     <Compile Include="VkApiMethod.cs" />
     <Compile Include="VkClient.cs" />
+    <Compile Include="VkPermissions.cs" />
     <Compile Include="VkRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Messages\History\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
