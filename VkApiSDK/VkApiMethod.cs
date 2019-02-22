@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VkApiSDK
 {
@@ -39,7 +36,7 @@ namespace VkApiSDK
         /// Возвращает набор параметров для запроса.
         /// </summary>
         /// <returns></returns>
-        public abstract string GetMethodApiParams();
+        protected abstract string GetMethodApiParams();
 
         /// <summary>
         /// Возвращает uri запроса.

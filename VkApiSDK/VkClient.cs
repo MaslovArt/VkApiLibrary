@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Errors;
-using VkApiSDK.Utils;
 using VkApiSDK.Messages.Dialogs;
 
 namespace VkApiSDK
@@ -15,8 +13,10 @@ namespace VkApiSDK
     {
         #region Variables
 
+        private readonly string AppID = "6871136",
+                                Scope = VkPermissions.GetScopeString(VkPermissions.Friends, VkPermissions.Offline);
+
         private AuthData _authData;
-        private string token = "";
         private const string AUTH_DATA_FILE = "authData.dat";
         private int messageCount = 0;
         private int messageOffset = 0;
@@ -27,7 +27,7 @@ namespace VkApiSDK
 
         #region Events
 
-        public event Action<Error> OnAccessDenied;
+        public event Action<Error> OnRequestError;
         //ToDo another error events
 
         #endregion
@@ -47,15 +47,10 @@ namespace VkApiSDK
         /// Авторизация
         /// </summary>
         /// <returns></returns>
-        public async Task AuthAsync()
+        public async Task AuthAsync(Func<string, string, string, AuthData> authMethod)
         {
-            var wasLoad = await DataSerialezer.LoadInfo(out _authData, AUTH_DATA_FILE);
-            if (!wasLoad)
-            {
-                VkAutharization vkA = new VkAutharization(token);
-                _authData = await vkA.AuthAsync();
-                await DataSerialezer.SaveInfo(_authData, AUTH_DATA_FILE);
-            }
+            VkAutharization vka = new VkAutharization(AppID, Scope, authMethod);
+            _authData = await vka.AuthAsync();
         }
 
         /// <summary>
@@ -66,14 +61,17 @@ namespace VkApiSDK
         /// <returns></returns>
         public async Task<DialogsData> GetDialogsAsync(int count = 20, int offset = 0)
         {
-            var result = await _vkRequest.Dispath<DialogsResponse>(
+            var result = await _vkRequest.Dispath<VkResponse<DialogsData>>(
                 new GetConversations(_authData.AccessToken)
                 {
                     Count = count,
                     Offset = offset
+                }, 
+                (o) => {
+                    OnRequestError(o);
                 });
 
-            return result != null ? result.DialogsData : null;
+            return result.IsResultNull() ? null : result.Response;
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace VkApiSDK
         /// <returns>Друзей пользователя</returns>
         public async Task<FriendsData> GetFriendsAsync(int count = 5000, int offset = 0)
         {
-            var result = await _vkRequest.Dispath<FriendsResponse>(
+            var result = await _vkRequest.Dispath<VkResponse<FriendsData>>(
                 new GetFriends(_authData.AccessToken)
                 {
                     UserID = _authData.UserID,
@@ -92,7 +90,7 @@ namespace VkApiSDK
                     Offset = offset
                 });
 
-            return result != null ? result.FriendsData : null;
+            return result.IsResultNull() ? null : result.Response;
         }
 
         /// <summary>
@@ -102,13 +100,13 @@ namespace VkApiSDK
         /// <returns>Информацию о пользователя</returns>
         public async Task<User[]> GetUsersAsync(params string[] userIDs)
         {
-            var result = await _vkRequest.Dispath<UserResponse>(
+            var result = await _vkRequest.Dispath<VkResponse<User[]>>(
                 new GetUsers(_authData.AccessToken)
                 {
                     UserIDs = userIDs
                 });
 
-            return result != null ? result.Users : null;
+            return result.IsResultNull() ? null : result.Response;
         }
 
 

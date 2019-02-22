@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VkApiSDK
+﻿namespace VkApiSDK
 {
     /// <summary>
     /// Список названий прав доступа, которые необходимы приложению.
@@ -85,5 +79,23 @@ namespace VkApiSDK
         /// Доступ к email пользователя.
         /// </summary>
         public const string Email = "email";
+
+        /// <summary>
+        /// Возвращает строку для scope.
+        /// </summary>
+        /// <param name="scopes">Массив разрещений</param>
+        /// <returns>Строка</returns>
+        public static string GetScopeString(params string[] scopes)
+        {
+            string result = "";
+            if (scopes.Length > 0)
+            {
+                foreach (string scope in scopes)
+                    result += "," + scope;
+                result = result.Remove(0, 1);
+            }
+
+            return result;
+        }
     }
 }

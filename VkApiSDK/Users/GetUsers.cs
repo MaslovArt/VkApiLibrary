@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VkApiSDK.Users
+﻿namespace VkApiSDK.Users
 {
     /// <summary>
     /// Возвращает расширенную информацию о пользователях.
@@ -27,7 +21,7 @@ namespace VkApiSDK.Users
         /// </summary>
         public string[] UserIDs { get; set; }
 
-        public override string GetMethodApiParams()
+        protected override string GetMethodApiParams()
         {
             return string.Format("&user_ids={0}", ArrayToString(UserIDs));
         }

@@ -1,10 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VkApiSDK.Utils;
+using VkApiSDK.Messages.Attachments;
 
 namespace VkApiSDK.Messages
 {
@@ -33,5 +30,11 @@ namespace VkApiSDK.Messages
 
         [JsonProperty("text")]
         public string Text { get; set; }
+
+        [JsonProperty("fwd_messages")]
+        public Message[] ForwardMessages { get; set; }
+
+        [JsonProperty("attachments")]
+        public Attachment[] Attachments { get; set; }
     }
 }

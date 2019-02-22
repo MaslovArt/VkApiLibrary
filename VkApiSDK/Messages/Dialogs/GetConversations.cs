@@ -60,7 +60,7 @@ namespace VkApiSDK.Messages.Dialogs
             Offset += count;
         }
 
-        public override string GetMethodApiParams()
+        protected override string GetMethodApiParams()
         {
             return string.Format("&offset={0}&count={1}&filter={2}", offset,
                                                                      count,

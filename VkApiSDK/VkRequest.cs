@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
@@ -34,15 +31,17 @@ namespace VkApiSDK
 
             T result = null;
 
-            result = JsonConvert.DeserializeObject<T>(responseStringJSON);
-
-            if(result.ChechIfResponseNull())
+            if (responseStringJSON.StartsWith("{\"error\":{"))
             {
                 if (OnRequestError != null)
                 {
                     var err = JsonConvert.DeserializeObject<ErrorResponse>(responseStringJSON);
                     OnRequestError(err.Error);
                 }
+            }
+            else
+            {
+                result = JsonConvert.DeserializeObject<T>(responseStringJSON);
             }
 
             return result;

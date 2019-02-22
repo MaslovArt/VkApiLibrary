@@ -8,6 +8,6 @@ namespace VkApiSDK.Messages.Dialogs
         public string Type { get; set; }
 
         [JsonProperty("id")]
-        public int ID { get; set; }
+        public string ID { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VkApiSDK.Utils
 {
-    public static class DataSerialezer
+    public static class DataSerializer
     {
         /// <summary>
         /// Серриализует данные приложения

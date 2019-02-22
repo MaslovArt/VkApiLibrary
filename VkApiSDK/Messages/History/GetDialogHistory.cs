@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VkApiSDK.Messages.History
 {
@@ -65,7 +61,7 @@ namespace VkApiSDK.Messages.History
         /// </summary>
         public int StartMessageID { get; set; }
 
-        public override string GetMethodApiParams()
+        protected override string GetMethodApiParams()
         {
             return string.Format("&offset={0}&count={1}&user_id={2}&peer_id={3}&start_message_id={4}", Offset,
                                                                                                        Count,

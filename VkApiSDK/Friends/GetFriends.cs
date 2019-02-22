@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace VkApiSDK.Friends
 {
@@ -31,7 +26,7 @@ namespace VkApiSDK.Friends
         /// <summary>
         /// Идентификатор пользователя, для которого необходимо получить список друзей. 
         /// </summary>
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         /// <summary>
         /// Порядок, в котором нужно вернуть список друзей. 
