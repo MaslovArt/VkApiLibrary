@@ -68,7 +68,7 @@ namespace VkApiSDK.Friends
             }
         }
 
-        public override string GetMethodApiParams()
+        protected override string GetMethodApiParams()
         {
              return string.Format("&user_id={0}&order={1}&count={2}&offset={3}", UserID,
                                                                                  Order,
