@@ -10,10 +10,10 @@ namespace VkApiSDK
         public string AccessToken { get; set; }
 
         [JsonProperty("expires_in")]
-        public int Expires { get; set; }
+        public string Expires { get; set; }
 
         [JsonProperty("user_id")]
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         public override string ToString()
         {

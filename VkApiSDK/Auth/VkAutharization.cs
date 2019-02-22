@@ -7,35 +7,75 @@ using System.Net;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using VkApiSDK.Errors;
+using VkApiSDK.Utils;
+using System.IO;
 
 namespace VkApiSDK
 {
     public class VkAutharization
     {
-        public const string APP_ID = "6865053",
-                            APP_SecretKey = "lifwQ9ujqtJMnTNauL90",
-                            SCOPE = "messages,friends,offline";
-        private const string AUTH_URL = "https://oauth.vk.com/access_token?client_id={0}&client_secret={1}&redirect_uri=https://oauth.vk.com/blank.html&code={2},";
+        private const string   AUTH_URL = "https://oauth.vk.com/authorize?client_id={0}&display=page&redirect_uri=https://oauth.vk.com/blank.html&display=page&scope={1}&response_type=token&v=5.92",
+                               AUTH_DATA_FILE = "authData.dat";
 
-        private string auth_token;
-        private AuthData AuthData;
-        private HttpClient client;
+        private string         _appID,
+                               _scope;
+        private AuthData       _authData;
+        Func<string, string, string, AuthData> _authMethod;
 
-        public VkAutharization(string auth_token)
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="AppID">ID вк приложения</param>
+        /// <param name="Scope">Список разрещений.</param>
+        public VkAutharization(string AppID, string Scope, Func<string, string, string, AuthData> AuthMethod)
         {
-            this.auth_token = auth_token;
-            client = new HttpClient();
+            _authMethod = AuthMethod;
+            _appID = AppID;
+            _scope = Scope;
         }
 
-        public AuthData AuthdData
+        public AuthData AuthData
         {
-            get { return AuthData; }
+            get { return _authData; }
+            private set { _authData = value; }
         }
-            
+
+        /// <summary>
+        /// Проверяет сохраненный токен.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<bool> IfAccessTokenExist()
+        {
+            return await DataSerializer.LoadInfo(out _authData, AUTH_DATA_FILE);
+        }
+
+        /// <summary>
+        /// Удаляет токен.
+        /// </summary>
+        public void DeleteAccessToken()
+        {
+            if (File.Exists(AUTH_DATA_FILE))
+                File.Delete(AUTH_DATA_FILE);
+        }
+
+        /// <summary>
+        /// Выполняет авторизацию
+        /// </summary>
+        /// <param name="OnAuthError"></param>
+        /// <returns></returns>
         public async Task<AuthData> AuthAsync()
         {
-            var responseString = await client.GetStringAsync(String.Format(AUTH_URL, APP_ID, APP_SecretKey, auth_token));
-            AuthData = JsonConvert.DeserializeObject<AuthData>(responseString);
+            if (!IfAccessTokenExist().Result)
+            {
+                AuthData = _authMethod(AUTH_URL, _appID, _scope);
+                await DataSerializer.SaveInfo(AuthData, AUTH_DATA_FILE);
+
+                Debug.WriteLine("Request to get token");
+            }
+
+            Debug.WriteLine("We have token");
+
             return AuthData;
         }
     }
