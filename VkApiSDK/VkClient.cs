@@ -94,6 +94,21 @@ namespace VkApiSDK
         }
 
         /// <summary>
+        /// Получает список id онлайн друзей
+        /// </summary>
+        /// <returns>Массив айди пользователей</returns>
+        public async Task<string[]> GetOnlineFriendIDsAsync()
+        {
+            var result = await _vkRequest.Dispath<VkResponse<string[]>>(
+                new GetOnlineFriends(_authData.AccessToken)
+                {
+                    UserID = _authData.UserID
+                });
+
+            return result.IsResultNull() ? null : result.Response;
+        }
+
+        /// <summary>
         /// Получает информацию о пользователях
         /// </summary>
         /// <param name="userIDs">Набор id</param>
@@ -130,6 +145,18 @@ namespace VkApiSDK
             messageOffset += count;
 
             return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<User[]> GetOnlineFriendsAsync()
+        {
+            var onlineFriendIDs = await GetOnlineFriendIDsAsync();
+            var onlineFriendsData = await GetUsersAsync(onlineFriendIDs);
+
+            return onlineFriendsData;
         }
 
         /// <summary>
