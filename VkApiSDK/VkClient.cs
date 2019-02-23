@@ -6,6 +6,7 @@ using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Errors;
 using VkApiSDK.Messages.Dialogs;
+using VkApiSDK.Requests;
 
 namespace VkApiSDK
 {
@@ -14,10 +15,9 @@ namespace VkApiSDK
         #region Variables
 
         private readonly string AppID = "6871136",
-                                Scope = VkPermissions.GetScopeString(VkPermissions.Friends, VkPermissions.Offline);
+                                Scope = VkPermissions.GetScopeString(VkPermissions.Friends, VkPermissions.Offline); //messages
 
         private AuthData _authData;
-        private const string AUTH_DATA_FILE = "authData.dat";
         private int messageCount = 0;
         private int messageOffset = 0;
 
@@ -66,9 +66,6 @@ namespace VkApiSDK
                 {
                     Count = count,
                     Offset = offset
-                }, 
-                (o) => {
-                    OnRequestError(o);
                 });
 
             return result.IsResultNull() ? null : result.Response;
@@ -87,7 +84,13 @@ namespace VkApiSDK
                 {
                     UserID = _authData.UserID,
                     Count = count,
-                    Offset = offset
+                    Offset = offset,
+                    Fields = new string[]
+                    {
+                        ApiField.Photo50,
+                        ApiField.LastOnline,
+                        ApiField.IsOnline
+                    }
                 });
 
             return result.IsResultNull() ? null : result.Response;
@@ -113,12 +116,13 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="userIDs">Набор id</param>
         /// <returns>Информацию о пользователя</returns>
-        public async Task<User[]> GetUsersAsync(params string[] userIDs)
+        public async Task<User[]> GetUsersAsync(string[] Fields = null, params string[] userIDs)
         {
             var result = await _vkRequest.Dispath<VkResponse<User[]>>(
                 new GetUsers(_authData.AccessToken)
                 {
-                    UserIDs = userIDs
+                    UserIDs = userIDs,
+                    Fields = Fields ?? new string[] { }
                 });
 
             return result.IsResultNull() ? null : result.Response;

@@ -1,4 +1,6 @@
 ﻿using System;
+using VkApiSDK.Requests;
+using VkApiSDK.Requests.Attributes;
 
 namespace VkApiSDK.Friends
 {
@@ -15,12 +17,6 @@ namespace VkApiSDK.Friends
             :base(AccessToken)
         {
             VkApiMethodName = "friends.get";
-            Fields = new string[]
-            {
-                ApiField.Photo50,
-                ApiField.LastOnline,
-                ApiField.IsOnline
-            };
         }
 
         /// <summary>

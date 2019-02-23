@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace VkApiSDK
+namespace VkApiSDK.Requests
 {
     /// <summary>
     /// Базовый класс методов вк api.
@@ -44,6 +44,26 @@ namespace VkApiSDK
         /// <returns>Uri</returns>
         public string GetRequestString()
         {
+            //var @params = from p in this.GetType().GetProperties()
+            //              let attr = p.GetCustomAttributes(typeof(RequestParamAttr), true)
+            //              where attr.Length == 1
+            //              select new
+            //              {
+            //                  PropValue = p.GetValue(this),
+            //                  AttrName = (attr.First() as RequestParamAttr).ParamName
+            //              };
+
+            //var _reqUriParams = "";
+            //foreach (var param in @params)
+            //    _reqUriParams += string.Format("&{0}={1}", param.AttrName, param.PropValue);
+
+            //return string.Format("{0}{1}?access_token={2}&fields={3}{4}&v={5}", _apiUri, 
+            //                                                                    VkApiMethodName,
+            //                                                                    AccessToken,
+            //                                                                    ArrayToString(Fields),
+            //                                                                    _reqUriParams,
+            //                                                                    _apiVersion);
+
             return string.Format("{0}{1}?access_token={2}&fields={3}{4}&v={5}", _apiUri,
                                                                                 VkApiMethodName,
                                                                                 AccessToken,

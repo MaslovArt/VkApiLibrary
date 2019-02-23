@@ -1,4 +1,6 @@
-﻿namespace VkApiSDK.Users
+﻿using VkApiSDK.Requests;
+
+namespace VkApiSDK.Users
 {
     /// <summary>
     /// Возвращает расширенную информацию о пользователях.
@@ -9,11 +11,6 @@
             :base(AccessToken)
         {
             VkApiMethodName = "users.get";
-            Fields = new string[] 
-            {
-                ApiField.Photo50,
-                ApiField.LastOnline
-            };
         }
 
         /// <summary>

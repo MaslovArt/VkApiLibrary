@@ -26,5 +26,12 @@ namespace VkApiSDK.Users
 
         [JsonProperty("online")]
         public bool Online { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("bdate")]
+        public string Bdate { get; set; }
+
     }
 }

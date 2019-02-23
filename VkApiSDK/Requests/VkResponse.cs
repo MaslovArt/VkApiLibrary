@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VkApiSDK
+namespace VkApiSDK.Requests
 {
     public class VkResponse<T> : IVkResponse
     {

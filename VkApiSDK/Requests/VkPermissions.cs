@@ -1,4 +1,4 @@
-﻿namespace VkApiSDK
+﻿namespace VkApiSDK.Requests
 {
     /// <summary>
     /// Список названий прав доступа, которые необходимы приложению.

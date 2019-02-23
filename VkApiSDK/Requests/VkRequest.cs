@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using VkApiSDK.Errors;
 
-namespace VkApiSDK
+namespace VkApiSDK.Requests
 {
     class VkRequest
     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using VkApiSDK.Requests;
 
 namespace VkApiSDK.Messages.Dialogs
 {

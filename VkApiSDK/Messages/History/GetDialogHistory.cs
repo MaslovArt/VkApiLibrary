@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
+using VkApiSDK.Requests;
+using VkApiSDK.Requests.Attributes;
 
 namespace VkApiSDK.Messages.History
 {
-    class GetDialogHistory : VkApiMethod
+    public class GetDialogHistory : VkApiMethod
     {
         private int count = 10,
                     offset = 0;
@@ -63,6 +66,18 @@ namespace VkApiSDK.Messages.History
 
         protected override string GetMethodApiParams()
         {
+            var t = from p in this.GetType().GetProperties()
+                    let attr = p.GetCustomAttributes(typeof(RequestParamAttr), true)
+                    where attr.Length == 1
+                    select new {
+                        PropValue = p.GetValue(this),
+                        AttrName = (attr.First() as RequestParamAttr).ParamName
+                    };
+
+            var reqUri = "";
+            foreach (var param in t)
+                reqUri += string.Format("&{0}={1}", param.AttrName, param.PropValue);
+
             return string.Format("&offset={0}&count={1}&user_id={2}&peer_id={3}&start_message_id={4}", Offset,
                                                                                                        Count,
                                                                                                        UserID,
