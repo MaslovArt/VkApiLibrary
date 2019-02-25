@@ -4,10 +4,11 @@
     {
         private int _onlineMobile = 0;
 
-        public GetOnlineFriends(string AccessToken)
-            :base(AccessToken)
+        public GetOnlineFriends(string AccessToken, string UserID, string[] Fields = null, string Order = FriendOrder.Hints, int Count = 5000, int Offset = 0, bool OnlineMobile = false)
+            :base(AccessToken, UserID, Fields, Order, Count, Offset)
         {
             VkApiMethodName = "friends.getOnline";
+            this.OnlineMobile = OnlineMobile;
         }
 
         /// <summary>

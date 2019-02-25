@@ -13,10 +13,14 @@ namespace VkApiSDK.Friends
         private int count = 5000,
                     offset = 0;
 
-        public GetFriends(string AccessToken)
-            :base(AccessToken)
+        public GetFriends(string AccessToken, string UserID, string[] Fields = null, string Order = FriendOrder.Hints, int Count = 5000, int Offset = 0)
+            :base(AccessToken, Fields)
         {
             VkApiMethodName = "friends.get";
+            this.UserID = UserID;
+            this.Order = Order;
+            this.Count = Count;
+            this.Offset = Offset;
         }
 
         /// <summary>
@@ -27,7 +31,7 @@ namespace VkApiSDK.Friends
         /// <summary>
         /// Порядок, в котором нужно вернуть список друзей. 
         /// </summary>
-        public string Order { get; set; } = FriendOrder.Hints;
+        public string Order { get; set; }
 
         /// <summary>
         /// Количество друзей, которое нужно вернуть.

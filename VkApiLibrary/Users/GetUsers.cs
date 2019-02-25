@@ -5,12 +5,13 @@ namespace VkApiSDK.Users
     /// <summary>
     /// Возвращает расширенную информацию о пользователях.
     /// </summary>
-    class GetUsers : VkApiMethod
+    public class GetUsers : VkApiMethod
     {
-        public GetUsers(string AccessToken)
-            :base(AccessToken)
+        public GetUsers(string AccessToken, string[] UserIDs, string[] Fields = null)
+            :base(AccessToken, Fields)
         {
             VkApiMethodName = "users.get";
+            this.UserIDs = UserIDs;
         }
 
         /// <summary>

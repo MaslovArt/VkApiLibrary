@@ -11,10 +11,13 @@ namespace VkApiSDK.Messages.Dialogs
         private int count = 10,
                     offset = 0;
 
-        public GetConversations(string AccessToken)
-            :base(AccessToken)
+        public GetConversations(string AccessToken, string[] Fields = null, int Offset = 0, int Count = 10, string Filter = DialogFilter.All)
+            :base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getConversations";
+            this.Offset = Offset;
+            this.Count = Count;
+            this.Filter = Filter;
         }
 
         /// <summary>
@@ -51,14 +54,6 @@ namespace VkApiSDK.Messages.Dialogs
         public string Filter
         {
             get; set;
-        } = DialogFilter.All;
-
-        /// <summary>
-        /// Устанавливает смещение для получения следующего набора диалогов.
-        /// </summary>
-        public void Next()
-        {
-            Offset += count;
         }
 
         protected override string GetMethodApiParams()

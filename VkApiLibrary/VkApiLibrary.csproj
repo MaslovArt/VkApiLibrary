@@ -38,13 +38,16 @@
     <Compile Include="Auth\VkAutharization.cs" />
     <Compile Include="Errors\Error.cs" />
     <Compile Include="Errors\ErrorResponse.cs" />
+    <Compile Include="Friends\ApiFriends.cs" />
     <Compile Include="Friends\FriendOrder.cs" />
     <Compile Include="Friends\FriendsData.cs" />
     <Compile Include="Friends\GetFriends.cs" />
     <Compile Include="Friends\GetOnlineFriends.cs" />
     <Compile Include="Friends\OnlineFriendsData.cs" />
+    <Compile Include="Interfaces\IDataProvider.cs" />
     <Compile Include="Interfaces\IVkApiMethod.cs" />
     <Compile Include="Interfaces\IVkResponse.cs" />
+    <Compile Include="Messages\ApiMessages.cs" />
     <Compile Include="Messages\Attachments\Attachment.cs" />
     <Compile Include="Messages\Dialogs\ChatSettings.cs" />
     <Compile Include="Messages\Dialogs\Conversation.cs" />
@@ -64,6 +67,7 @@
     <Compile Include="Requests\VkPermissions.cs" />
     <Compile Include="Requests\VkRequest.cs" />
     <Compile Include="Requests\VkResponse.cs" />
+    <Compile Include="Users\ApiUsers.cs" />
     <Compile Include="Users\GetUsers.cs" />
     <Compile Include="Users\LastOnline.cs" />
     <Compile Include="Users\User.cs" />

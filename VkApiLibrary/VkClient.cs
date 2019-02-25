@@ -6,6 +6,7 @@ using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Errors;
 using VkApiSDK.Messages.Dialogs;
+using VkApiSDK.Messages;
 using VkApiSDK.Requests;
 
 namespace VkApiSDK
@@ -62,11 +63,10 @@ namespace VkApiSDK
         public async Task<DialogsData> GetDialogsAsync(int count = 20, int offset = 0)
         {
             var result = await _vkRequest.Dispath<VkResponse<DialogsData>>(
-                new GetConversations(_authData.AccessToken)
-                {
-                    Count = count,
-                    Offset = offset
-                });
+                ApiMessages.GetConversations(
+                    AccessToken: _authData.AccessToken,
+                    Offset: offset,
+                    Count: count));
 
             return result.IsResultNull() ? null : result.Response;
         }
@@ -80,18 +80,17 @@ namespace VkApiSDK
         public async Task<FriendsData> GetFriendsAsync(int count = 5000, int offset = 0)
         {
             var result = await _vkRequest.Dispath<VkResponse<FriendsData>>(
-                new GetFriends(_authData.AccessToken)
-                {
-                    UserID = _authData.UserID,
-                    Count = count,
-                    Offset = offset,
-                    Fields = new string[]
+                ApiFriends.GetFriens(
+                    AccessToken: _authData.AccessToken,
+                    UserID: _authData.UserID,
+                    Fields: new string[]
                     {
                         ApiField.Photo50,
                         ApiField.LastOnline,
                         ApiField.IsOnline
-                    }
-                });
+                    },
+                    Count: count,
+                    Offset: offset));
 
             return result.IsResultNull() ? null : result.Response;
         }
@@ -103,10 +102,9 @@ namespace VkApiSDK
         public async Task<string[]> GetOnlineFriendIDsAsync()
         {
             var result = await _vkRequest.Dispath<VkResponse<string[]>>(
-                new GetOnlineFriends(_authData.AccessToken)
-                {
-                    UserID = _authData.UserID
-                });
+                ApiFriends.GetOnlineFriends(
+                    AccessToken: _authData.AccessToken,
+                    UserID: _authData.UserID));
 
             return result.IsResultNull() ? null : result.Response;
         }
@@ -119,11 +117,10 @@ namespace VkApiSDK
         public async Task<User[]> GetUsersAsync(string[] Fields = null, params string[] userIDs)
         {
             var result = await _vkRequest.Dispath<VkResponse<User[]>>(
-                new GetUsers(_authData.AccessToken)
-                {
-                    UserIDs = userIDs,
-                    Fields = Fields ?? new string[] { }
-                });
+                ApiUsers.Get(
+                    AccessToken: _authData.AccessToken,
+                    UserIDs: userIDs,
+                    Fields: Fields));
 
             return result.IsResultNull() ? null : result.Response;
         }
@@ -138,9 +135,9 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="count">Кол-во диалогов</param>
         /// <returns>Диалоги</returns>
-        public async Task<DialogRenderData[]> GetNextDialogsDataAsync(int count = 20)
+        public async Task<DialogRenderData[]> GetDialogsDataAsync(int count = 20, int offset = 0)
         {
-            var dialogs = await GetDialogsAsync(count, messageOffset);
+            var dialogs = await GetDialogsAsync(count, offset);
             var userIDs = getUserIDs(dialogs);
             var users = await GetUsersAsync(userIDs);
 
@@ -149,18 +146,6 @@ namespace VkApiSDK
             messageOffset += count;
 
             return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<User[]> GetOnlineFriendsAsync()
-        {
-            var onlineFriendIDs = await GetOnlineFriendIDsAsync();
-            var onlineFriendsData = await GetUsersAsync(onlineFriendIDs);
-
-            return onlineFriendsData;
         }
 
         /// <summary>

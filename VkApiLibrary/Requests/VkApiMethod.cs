@@ -11,10 +11,10 @@ namespace VkApiSDK.Requests
         private string _apiUri = "https://api.vk.com/method/",
                        _apiVersion = "5.92";
 
-        public VkApiMethod(string AccessToken)
+        public VkApiMethod(string AccessToken, string[] Fields = null)
         {
             this.AccessToken = AccessToken;
-            Fields = new string[] { };
+            this.Fields = Fields ?? new string[] { };
         }
 
         /// <summary>
