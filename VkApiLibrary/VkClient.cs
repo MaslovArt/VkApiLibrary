@@ -8,15 +8,13 @@ using VkApiSDK.Errors;
 using VkApiSDK.Messages.Dialogs;
 using VkApiSDK.Messages;
 using VkApiSDK.Requests;
+using VkApiSDK.Interfaces;
 
 namespace VkApiSDK
 {
     public class VkClient
     {
         #region Variables
-
-        private readonly string AppID = "6871136",
-                                Scope = VkPermissions.GetScopeString(VkPermissions.Friends, VkPermissions.Offline); //messages
 
         private AuthData _authData;
         private int messageCount = 0;
@@ -33,12 +31,22 @@ namespace VkApiSDK
 
         #endregion
 
-        public VkClient()
+        public VkClient(string AppID, string Scope, IDataProvider DataProvider = null)
         {
+            this.AppID = AppID;
+            this.Scope = Scope;
+            this.DataProvider = DataProvider;
+
             _vkRequest = new VkRequest();
         }
 
         #region Properties
+
+        public string AppID { get; private set; }
+
+        public string Scope { get; private set; }
+
+        public IDataProvider DataProvider { get; set; }
 
         #endregion
 
@@ -48,10 +56,12 @@ namespace VkApiSDK
         /// Авторизация
         /// </summary>
         /// <returns></returns>
-        public async Task AuthAsync(Func<string, string, string, AuthData> authMethod)
+        public bool Auth(Func<string, string, string, AuthData> AuthMethod)
         {
-            VkAutharization vka = new VkAutharization(AppID, Scope, authMethod);
-            _authData = await vka.AuthAsync();
+            VkAutharization vka = new VkAutharization(AppID, Scope, DataProvider, AuthMethod);
+            _authData = vka.Auth();
+
+            return _authData != null;
         }
 
         /// <summary>
