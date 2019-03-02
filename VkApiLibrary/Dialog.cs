@@ -1,21 +1,29 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VkApiSDK.Utils;
 
-namespace VkApiSDK.Messages
+namespace VkApiSDK
 {
     [JsonConverter(typeof(JsonPathConverter))]
     public class Dialog : Peer
     {
+        private string _id;
+
         [JsonProperty("conversation.peer.type")]
-        public string Type { get; set; }
+        public override string Type { get; set; }
 
         [JsonProperty("conversation.peer.id")]
-        public override string ID { get; set; }
+        public override string ID
+        {
+            get { return _id; }
+            set
+            {
+                if (value.Length == 10)
+                    _id = ((Convert.ToInt32(value)) - 2000000000).ToString();
+                else
+                    _id = value;
+            }
+        }
 
         [JsonProperty("unread_count")]
         public int UnreadCount { get; set; }

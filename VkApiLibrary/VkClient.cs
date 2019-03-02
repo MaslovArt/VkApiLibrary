@@ -163,12 +163,12 @@ namespace VkApiSDK
             var result = await _vkRequest.Dispath<VkResponse<string>>(
                 ApiMessages.SendMessage(
                     AccessToken: _authData.AccessToken,
-                    PeedID: peer.ID,
+                    PeedID: ConvertIDIfChat(peer),
                     Message: message,
                     Attachments: ""
                 ));
 
-            return result.Response ?? string.Empty;
+            return result.IsResultNull() ? null : result.Response;
         }
 
         public async Task<Dictionary<string, int>> DeleteMessage(IEnumerable<string> MessageIDs, bool DeleteForAll = true)
@@ -180,8 +180,57 @@ namespace VkApiSDK
                     DeleteForAll: DeleteForAll
                 ));
 
-            return result.Response ?? null;
-        } 
+            return result.IsResultNull() ? null : result.Response;
+        }
+
+        public async Task<bool> EditMessage(Peer peer, Message editMessage, string newText, string attachments = "")
+        {
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.EditMessage(
+                    AccessToken: _authData.AccessToken,
+                    PeedID: peer.ID,
+                    MessageID: editMessage.ID,
+                    Message: newText,
+                    Attachments: attachments
+                ));
+
+            return result != null;
+        }
+
+        public async Task<bool> PinMessage(Peer peer, Message pinMessage)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<object>>(
+                ApiMessages.Pin(
+                    AccessToken: _authData.AccessToken,
+                    PeerID: ConvertIDIfChat(peer),
+                    MessageID: pinMessage.ID     
+                ));
+
+            return result == null;
+        }
+
+        public async Task<bool> UnpinMessage(Peer peer)
+        { 
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.Unpin(
+                    AccessToken: _authData.AccessToken,
+                    PeerID: ConvertIDIfChat(peer)
+                ));
+
+            return result == null ? false : result.Response == 1;
+        }
+
+        public async Task<bool> MarkAsRead(Message fromMessage)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.MarkAsRead(
+                    AccessToken: _authData.AccessToken,
+                    PeerID: fromMessage.PeerID,
+                    StartMessageID: fromMessage.ID
+                ));
+
+            return result == null ? false : result.Response == 1;
+        }
 
         public async Task<bool> SetActivity(User user, string activityType)
         {
@@ -192,27 +241,58 @@ namespace VkApiSDK
                     ActivityType: activityType
                 ));
 
-            return result.IsResultNull();
+            return result != null;
         }
 
-        public async Task<DialogHistoryData> GetDialogHistory(User user, int offset = 0, int count = 20, int startMessageID = -1, IEnumerable<string> fields = null)
+        public async Task<DialogHistoryData> GetDialogHistory(Peer peer, int count = 20, int offset = 0, int startMessageID = -1, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<DialogHistoryData>>(
                 ApiMessages.GetDialogHistory(
                     AccessToken: _authData.AccessToken,
-                    UserID: user.ID,
+                    PeerID: ConvertIDIfChat(peer),
                     Offset: offset,
                     Count: count,
                     StartMessageID: startMessageID,
                     Fields: fields
                 ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result == null ? null : result.Response;
+        }
+
+        public async Task<Chat> GetChat(string chatID, IEnumerable<string> fields = null)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<Chat>>(
+                ApiMessages.GetChat(
+                    AccessToken: _authData.AccessToken,
+                    ChatID: chatID,
+                    Fields: fields
+                ));
+
+            return result == null ? null : result.Response;
+        }
+
+        public async Task<bool> EditChat(Chat chat, string newTitle)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.EditChat(
+                    AccessToken: _authData.AccessToken,
+                    ChatID: chat.ID,
+                    Title: newTitle    
+                ));
+
+            return result != null;
         }
 
         #endregion
 
         #region Private methods
+
+        private string ConvertIDIfChat(Peer peer)
+        {
+            if (peer.Type == "chat")
+               return (2000000000 + Convert.ToInt32(peer.ID)).ToString();
+            return peer.ID;
+        }
 
         private DialogRenderData[] GetDialogsRenderData(DialogsData dialogs, User[] users)
         {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VkApiSDK.Messages.Attachments
+﻿namespace VkApiSDK.Messages.Attachments
 {
     /// <summary>
     /// Тип медиавложения.
@@ -17,6 +11,7 @@ namespace VkApiSDK.Messages.Attachments
                             Doc = "doc",
                             Wall = "wall",
                             Market = "market",
+                            Sticker = "sticker",
                             Poll = "poll";
     }
 }

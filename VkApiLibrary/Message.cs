@@ -3,11 +3,14 @@ using System;
 using VkApiSDK.Utils;
 using VkApiSDK.Messages.Attachments;
 
-namespace VkApiSDK.Messages
+namespace VkApiSDK
 {
     public class Message
     {
         private VkDateTime data;
+
+        [JsonProperty("id")]
+        public string ID { get; set; }
 
         [JsonProperty("date")]
         public string Date
@@ -20,10 +23,10 @@ namespace VkApiSDK.Messages
         }
 
         [JsonProperty("from_id")]
-        public int FromID { get; set; }
+        public string FromID { get; set; }
 
         [JsonProperty("peer_id")]
-        public int PeerID { get; set; }
+        public string PeerID { get; set; }
 
         [JsonProperty("out")]
         public int Out { get; set; }

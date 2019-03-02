@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VkApiSDK.Requests;
-using VkApiSDK.Messages.Attachments;
 
 namespace VkApiSDK.Messages.Dialogs
 {
@@ -13,11 +9,10 @@ namespace VkApiSDK.Messages.Dialogs
     /// </summary>
     public class SendMessage : VkApiMethod
     {
-        public SendMessage(string AccessToken, string PeerID, string Message, string Attachments, string[] ForwardMessageIDs = null)
+        public SendMessage(string AccessToken, string PeerID, string Message, string Attachments, IEnumerable<string> ForwardMessageIDs = null)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.send";
-            //this.UserID = UserID;
             this.PeerID = PeerID;
             this.Message = Message;
             this.Attachments = Attachments;
@@ -54,16 +49,15 @@ namespace VkApiSDK.Messages.Dialogs
         /// отображаться в теле письма у получателя. Не более 100 значений на верхнем уровне, максимальный уровень 
         /// вложенности: 45, максимальное количество пересылаемых сообщений 500
         /// </summary>
-        public string[] ForwardMessageIDs { get; set; }
+        public IEnumerable<string> ForwardMessageIDs { get; set; }
 
         protected override string GetMethodApiParams()
         {
-            return string.Format("&user_id={0}&peer_id={1}&message={2}&attachment={3}&forward_messages={4}&random_id={5}", UserID,
-                                                                                                                           PeerID,
-                                                                                                                           Message,
-                                                                                                                           Attachments,
-                                                                                                                           ArrayToString(ForwardMessageIDs),
-                                                                                                                           RandomID);
+            return string.Format("&peer_id={0}&message={1}&attachment={2}&forward_messages={3}&random_id={4}", PeerID,
+                                                                                                               Message,
+                                                                                                               Attachments,
+                                                                                                               ArrayToString(ForwardMessageIDs),
+                                                                                                               RandomID);
         }
     }
 }

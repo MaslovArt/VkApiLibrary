@@ -1,11 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
-namespace VkApiSDK.Users
+namespace VkApiSDK
 {
     public class User : Peer
     {
         [JsonProperty("id")]
         public override string ID { get; set; }
+
+        public override string Type { get; set; } = "user";
 
         [JsonProperty("first_name")]
         public string FirstName { get; set; }

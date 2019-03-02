@@ -79,14 +79,6 @@ namespace VkApiSDK.Requests
         /// <returns>Строка</returns>
         protected string ArrayToString(IEnumerable<string> items)
         {
-            //var result = "";
-
-            //if (items.Count() > 0)
-            //{
-            //    foreach (var item in items)
-            //        result += "," + item;
-            //    result = result.Remove(0, 1);
-            //}
             return string.Join(",", items);
         }
     }

@@ -12,11 +12,11 @@ namespace VkApiSDK.Messages
         private int count = 10,
                     offset = 0;
 
-        public GetDialogHistory(string AccessToken, string UserID, int Offset = 0, int Count = 10, int StartMessageID = -1, IEnumerable<string>  Fields = null)
+        public GetDialogHistory(string AccessToken, string PeerID, int Offset = 0, int Count = 10, int StartMessageID = -1, IEnumerable<string>  Fields = null)
             :base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getHistory";
-            this.UserID = UserID;
+            this.PeerID = PeerID;
             this.Offset = Offset;
             this.Count = Count;
             this.StartMessageID = StartMessageID;
@@ -52,9 +52,9 @@ namespace VkApiSDK.Messages
         }
 
         /// <summary>
-        /// Идентификатор пользователя, историю переписки с которым необходимо вернуть.
+        /// Идентификатор назначения, историю переписки с которым необходимо вернуть.
         /// </summary>
-        public string UserID { get; set; }
+        public string PeerID { get; set; }
 
         /// <summary>
         /// Если значение > 0, то это идентификатор сообщения, начиная с которого нужно вернуть историю переписки,
@@ -66,9 +66,9 @@ namespace VkApiSDK.Messages
 
         protected override string GetMethodApiParams()
         {
-            return string.Format("&offset={0}&count={1}&user_id={2}&start_message_id={3}", Offset,
+            return string.Format("&offset={0}&count={1}&peer_id={2}&start_message_id={3}", Offset,
                                                                                            Count,
-                                                                                           UserID,
+                                                                                           PeerID,
                                                                                            StartMessageID);
         }
     }
