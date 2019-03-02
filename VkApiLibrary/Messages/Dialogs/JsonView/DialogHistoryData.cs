@@ -2,15 +2,12 @@
 
 namespace VkApiSDK.Messages.Dialogs
 {
-    public class DialogsData
+    public class DialogHistoryData
     {
         [JsonProperty("count")]
         public int Count { get; set; }
 
         [JsonProperty("items")]
-        public Dialog[] Dialogs { get; set; }
-
-        [JsonProperty("unread_count")]
-        public int UnreadCount { get; set; }
+        public Message[] Messages { get; set; }
     }
 }

@@ -54,15 +54,14 @@ namespace VkApiSDK
             {
                 object obj;
                 if(DataProvider.LoadObject(out obj, _dataName))
-                {
                     AuthData = obj as AuthData;
-                }
             }
 
             if (AuthData == null)
             {
                 AuthData = _authMethod(AUTH_URL, _appID, _scope);
-                DataProvider.SaveObject(AuthData, _dataName);
+                if (DataProvider != null)
+                    DataProvider.SaveObject(AuthData, _dataName);
             }
 
             return AuthData;

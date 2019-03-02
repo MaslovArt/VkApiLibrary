@@ -3,18 +3,24 @@ using System.Linq;
 using VkApiSDK.Requests;
 using VkApiSDK.Requests.Attributes;
 
-namespace VkApiSDK.Messages.History
+namespace VkApiSDK.Messages
 {
+    /// <summary>
+    /// Возвращает историю сообщений для указанного диалога.
+    /// </summary>
     public class GetDialogHistory : VkApiMethod
     {
         private int count = 10,
                     offset = 0;
 
-        public GetDialogHistory(string AccessToken)
-            :base(AccessToken)
+        public GetDialogHistory(string AccessToken, string UserID, int Offset = 0, int Count = 10, int StartMessageID = -1, string[] Fields = null)
+            :base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getHistory";
-            StartMessageID = -1;
+            this.UserID = UserID;
+            this.Offset = Offset;
+            this.Count = Count;
+            this.StartMessageID = StartMessageID;
         }
 
         /// <summary>
@@ -52,11 +58,6 @@ namespace VkApiSDK.Messages.History
         public string UserID { get; set; }
 
         /// <summary>
-        /// Идентификатор назначения.
-        /// </summary>
-        public string PeerID { get; set; }
-
-        /// <summary>
         /// Если значение > 0, то это идентификатор сообщения, начиная с которого нужно вернуть историю переписки,
         /// если передано значение 0 то вернутся сообщения с самого начала переписки,
         /// если же передано значение -1, то к значению параметра offset прибавляется количество входящих непрочитанных
@@ -66,11 +67,10 @@ namespace VkApiSDK.Messages.History
 
         protected override string GetMethodApiParams()
         {
-            return string.Format("&offset={0}&count={1}&user_id={2}&peer_id={3}&start_message_id={4}", Offset,
-                                                                                                       Count,
-                                                                                                       UserID,
-                                                                                                       PeerID,
-                                                                                                       StartMessageID);
+            return string.Format("&offset={0}&count={1}&user_id={2}&start_message_id={3}", Offset,
+                                                                                           Count,
+                                                                                           UserID,
+                                                                                           StartMessageID);
         }
     }
 }
