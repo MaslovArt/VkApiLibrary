@@ -39,7 +39,6 @@ namespace VkApiSDK.Utils
 
         public override bool CanConvert(Type objectType)
         {
-            // CanConvert is not called when [JsonConverter] attribute is used
             return false;
         }
 

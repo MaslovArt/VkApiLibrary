@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using VkApiSDK.Requests;
-using VkApiSDK.Requests.Attributes;
 
 namespace VkApiSDK.Messages
 {
@@ -13,7 +12,7 @@ namespace VkApiSDK.Messages
         private int count = 10,
                     offset = 0;
 
-        public GetDialogHistory(string AccessToken, string UserID, int Offset = 0, int Count = 10, int StartMessageID = -1, string[] Fields = null)
+        public GetDialogHistory(string AccessToken, string UserID, int Offset = 0, int Count = 10, int StartMessageID = -1, IEnumerable<string>  Fields = null)
             :base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getHistory";

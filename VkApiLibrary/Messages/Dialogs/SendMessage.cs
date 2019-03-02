@@ -13,11 +13,11 @@ namespace VkApiSDK.Messages.Dialogs
     /// </summary>
     public class SendMessage : VkApiMethod
     {
-        public SendMessage(string AccessToken, string UserID, string Message, string Attachments, string[] ForwardMessageIDs = null, string PeerID = "")
+        public SendMessage(string AccessToken, string PeerID, string Message, string Attachments, string[] ForwardMessageIDs = null)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.send";
-            this.UserID = UserID;
+            //this.UserID = UserID;
             this.PeerID = PeerID;
             this.Message = Message;
             this.Attachments = Attachments;

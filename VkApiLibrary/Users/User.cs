@@ -2,10 +2,10 @@
 
 namespace VkApiSDK.Users
 {
-    public class User
+    public class User : Peer
     {
         [JsonProperty("id")]
-        public string ID { get; set; }
+        public override string ID { get; set; }
 
         [JsonProperty("first_name")]
         public string FirstName { get; set; }

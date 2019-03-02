@@ -8,7 +8,7 @@ namespace VkApiSDK.Messages.Dialogs
         public int Count { get; set; }
 
         [JsonProperty("items")]
-        public TestDialog[] Dialogs { get; set; }
+        public Dialog[] Dialogs { get; set; }
 
         [JsonProperty("unread_count")]
         public int UnreadCount { get; set; }

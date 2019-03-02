@@ -9,24 +9,27 @@ using VkApiSDK.Utils;
 namespace VkApiSDK.Messages
 {
     [JsonConverter(typeof(JsonPathConverter))]
-    public class TestDialog
+    public class Dialog : Peer
     {
         [JsonProperty("conversation.peer.type")]
         public string Type { get; set; }
 
         [JsonProperty("conversation.peer.id")]
-        public string ID { get; set; }
+        public override string ID { get; set; }
 
         [JsonProperty("unread_count")]
         public int UnreadCount { get; set; }
 
-        [JsonProperty("chat_settings.title")]
+        [JsonProperty("conversation.chat_settings.title")]
         public string Title { get; set; }
 
         [JsonProperty("last_message")]
-        public Message Message { get; set; }
+        public Message LastMessage { get; set; }
 
-        [JsonProperty("last_message")]
+        [JsonProperty("conversation.can_write.allowed")]
         public bool CanWrite { get; set; }
+
+        [JsonProperty("conversation.chat_settings.photo.photo_50")]
+        public string Avatar { get; set; }
     }
 }

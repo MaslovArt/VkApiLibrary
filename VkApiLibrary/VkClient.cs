@@ -124,7 +124,7 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="userIDs">Набор id</param>
         /// <returns>Информацию о пользователя</returns>
-        public async Task<User[]> GetUsersAsync(string[] userIDs, string[] fields = null)
+        public async Task<User[]> GetUsersAsync(IEnumerable<string> userIDs, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<User[]>>(
                 ApiUsers.Get(
@@ -141,16 +141,16 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="count">Кол-во диалогов</param>
         /// <returns>Диалоги</returns>
-        //public async Task<DialogRenderData[]> GetDialogsDataAsync(int count = 20, int offset = 0)
-        //{
-        //    var dialogs = await GetDialogsAsync(count, offset);
-        //    var userIDs = getUserIDs(dialogs);
-        //    var users = await GetUsersAsync(userIDs);
+        public async Task<DialogRenderData[]> GetDialogsDataAsync(int count = 20, int offset = 0)
+        {
+            var dialogs = await GetDialogsAsync(count, offset);
+            var userIDs = getUserIDs(dialogs);
+            var users = await GetUsersAsync(userIDs);
 
-        //    DialogRenderData[] result = GetDialogsRenderData(dialogs, users);
+            DialogRenderData[] result = GetDialogsRenderData(dialogs, users);
 
-        //    return result;
-        //}
+            return result;
+        }
 
         /// <summary>
         /// Отправляет сообщение.
@@ -158,32 +158,44 @@ namespace VkApiSDK
         /// <param name="user"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public async Task<bool> SendMessage(User user, string message)
+        public async Task<string> SendMessage(Peer peer, string message)
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            var result = await _vkRequest.Dispath<VkResponse<string>>(
                 ApiMessages.SendMessage(
                     AccessToken: _authData.AccessToken,
-                    ToUserID: user.ID,
+                    PeedID: peer.ID,
                     Message: message,
                     Attachments: ""
                 ));
 
-            return result.IsResultNull();
+            return result.Response ?? string.Empty;
         }
-        
+
+        public async Task<Dictionary<string, int>> DeleteMessage(IEnumerable<string> MessageIDs, bool DeleteForAll = true)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<Dictionary<string, int>>>(
+                ApiMessages.DeleteMessage(
+                    AccessToken: _authData.AccessToken,
+                    MessageIDs: MessageIDs,
+                    DeleteForAll: DeleteForAll
+                ));
+
+            return result.Response ?? null;
+        } 
+
         public async Task<bool> SetActivity(User user, string activityType)
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
                 ApiMessages.SetActivity(
                     AccessToken: _authData.AccessToken,
-                    UserID: user.ID,                  
+                    UserID: user.ID,
                     ActivityType: activityType
                 ));
 
             return result.IsResultNull();
         }
 
-        public async Task<DialogHistoryData> GetDialogHistory(User user, int offset = 0, int count = 20, int startMessageID = -1, string[] fields = null)
+        public async Task<DialogHistoryData> GetDialogHistory(User user, int offset = 0, int count = 20, int startMessageID = -1, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<DialogHistoryData>>(
                 ApiMessages.GetDialogHistory(
@@ -198,51 +210,44 @@ namespace VkApiSDK
             return result.IsResultNull() ? null : result.Response;
         }
 
-        //public async Task
-
         #endregion
 
         #region Private methods
 
-        //private DialogRenderData[] GetDialogsRenderData(DialogsData dialogs, User[] users)
-        //{
-        //    var result = new DialogRenderData[dialogs.Dialogs.Count()];
-        //    for (int i = 0; i < result.Length; i++)
-        //    {
-        //        string peerName = "";
+        private DialogRenderData[] GetDialogsRenderData(DialogsData dialogs, User[] users)
+        {
+            var result = new DialogRenderData[dialogs.Dialogs.Count()];
+            for (int i = 0; i < result.Length; i++)
+            {
+                string peerName = "";
 
-        //        if (dialogs.Dialogs[i].Conversation.Peer.Type == "chat")
-        //            peerName = dialogs.Dialogs[i].Conversation.ChatSettings.Title;
+                if (dialogs.Dialogs[i].Type == "chat")
+                    peerName = dialogs.Dialogs[i].Title;
 
-        //        else if (dialogs.Dialogs[i].Conversation.Peer.Type == "user")
-        //            peerName = users.Where(o => o.ID == dialogs.Dialogs[i].Conversation.Peer.ID)
-        //                            .Select(o => o.FullName)
-        //                            .FirstOrDefault();
+                else if (dialogs.Dialogs[i].Type == "user")
+                    peerName = users.Where(o => o.ID == dialogs.Dialogs[i].ID)
+                                    .Select(o => o.FullName)
+                                    .FirstOrDefault();
 
-        //        result[i] = new DialogRenderData()
-        //        {
-        //            Type = dialogs.Dialogs[i].Conversation.Peer.Type,
-        //            ID = dialogs.Dialogs[i].Conversation.Peer.ID,
-        //            UnreadMsgCount = dialogs.Dialogs[i].Conversation.UnreadCount,
-        //            LastMessage = dialogs.Dialogs[i].Message.Text,
-        //            DialogTime = dialogs.Dialogs[i].Message.Date,
-        //            PeerName = peerName
-        //        };
-        //    }
+                result[i] = new DialogRenderData()
+                {
+                    Type = dialogs.Dialogs[i].Type,
+                    ID = dialogs.Dialogs[i].ID,
+                    UnreadMsgCount = dialogs.Dialogs[i].UnreadCount,
+                    LastMessage = dialogs.Dialogs[i].LastMessage.Text,
+                    DialogTime = dialogs.Dialogs[i].LastMessage.Date,
+                    PeerName = peerName
+                };
+            }
 
-        //    return result;
-        //}
+            return result;
+        }
 
-        //private string[] getUserIDs(DialogsData dd)
-        //{
-        //    List<string> userIDs = new List<string>();
-        //    foreach(Dialog dialog in dd.Dialogs)
-        //    {
-        //        if (dialog.Conversation.Peer.Type == "user")
-        //            userIDs.Add(dialog.Conversation.Peer.ID.ToString());
-        //    }
-        //    return userIDs.ToArray();
-        //}
+        private IEnumerable<string> getUserIDs(DialogsData dd)
+        {
+            return dd.Dialogs.Where(d => d.Type.Equals("user"))
+                             .Select(d => d.ID.ToString());
+        }
 
         #endregion
     }

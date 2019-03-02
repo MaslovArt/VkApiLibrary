@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace VkApiSDK.Users
 {
     public static class ApiUsers
     {
-        public static GetUsers Get(string AccessToken, string[] UserIDs, string[] Fields = null)
+        public static GetUsers Get(string AccessToken, IEnumerable<string> UserIDs, IEnumerable<string> Fields = null)
         {
             return new GetUsers(AccessToken, UserIDs, Fields);
         }

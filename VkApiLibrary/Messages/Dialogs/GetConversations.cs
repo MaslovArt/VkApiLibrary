@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using VkApiSDK.Requests;
 
 namespace VkApiSDK.Messages.Dialogs
@@ -11,7 +12,7 @@ namespace VkApiSDK.Messages.Dialogs
         private int count = 10,
                     offset = 0;
 
-        public GetConversations(string AccessToken, string[] Fields = null, int Offset = 0, int Count = 10, string Filter = DialogFilter.All)
+        public GetConversations(string AccessToken, IEnumerable<string> Fields = null, int Offset = 0, int Count = 10, string Filter = DialogFilter.All)
             :base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getConversations";

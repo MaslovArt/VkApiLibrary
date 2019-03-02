@@ -11,7 +11,7 @@ namespace VkApiSDK.Requests
         private string _apiUri = "https://api.vk.com/method/",
                        _apiVersion = "5.92";
 
-        public VkApiMethod(string AccessToken, string[] Fields = null)
+        public VkApiMethod(string AccessToken, IEnumerable<string> Fields = null)
         {
             this.AccessToken = AccessToken;
             this.Fields = Fields ?? new string[] { };
@@ -30,7 +30,7 @@ namespace VkApiSDK.Requests
         /// <summary>
         /// Cписок дополнительных полей, которые необходимо вернуть.
         /// </summary>
-        public string[] Fields { get; set; }
+        public IEnumerable<string> Fields { get; set; }
 
         /// <summary>
         /// Возвращает набор параметров для запроса.
@@ -79,16 +79,15 @@ namespace VkApiSDK.Requests
         /// <returns>Строка</returns>
         protected string ArrayToString(IEnumerable<string> items)
         {
-            var result = "";
+            //var result = "";
 
-            if (items.Count() > 0)
-            {
-                foreach (var item in items)
-                    result += "," + item;
-                result = result.Remove(0, 1);
-            }
-
-            return result;
+            //if (items.Count() > 0)
+            //{
+            //    foreach (var item in items)
+            //        result += "," + item;
+            //    result = result.Remove(0, 1);
+            //}
+            return string.Join(",", items);
         }
     }
 }
