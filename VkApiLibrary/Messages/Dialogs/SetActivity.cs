@@ -7,18 +7,18 @@ namespace VkApiSDK.Messages.Dialogs
     /// </summary>
     public class SetActivity : VkApiMethod
     {
-        public SetActivity(string AccessToken, string UserID, string Type = ActivityType.Typing)
+        public SetActivity(string AccessToken, string PeerID, string Type = ActivityType.Typing)
             : base(AccessToken)
         {
             VkApiMethodName = "messages.setActivity";
-            this.UserID = UserID;
+            this.PeerID = PeerID;
             this.Type = Type;
         }
 
         /// <summary>
         /// Идентификатор пользователя.
         /// </summary>
-        public string UserID { get; set; }
+        public string PeerID { get; set; }
 
         /// <summary>
         /// Тип сообщения.
@@ -27,7 +27,7 @@ namespace VkApiSDK.Messages.Dialogs
 
         protected override string GetMethodApiParams()
         {
-            return string.Format("&user_id={0}&type={1}", UserID, 
+            return string.Format("&peer_id={0}&type={1}", PeerID, 
                                                           Type);
         }
     }

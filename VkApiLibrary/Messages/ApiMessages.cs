@@ -59,5 +59,25 @@ namespace VkApiSDK.Messages
         {
             return new MarkAsRead(AccessToken, PeerID, StartMessageID);
         }
+
+        public static AddChatUser AddChatUser(string AccessToken, string ChatID, string UserID)
+        {
+            return new AddChatUser(AccessToken, ChatID, UserID);
+        }
+
+        public static CreateChat CreateChat(string AccessToken, string Title, IEnumerable<string> UserIDs)
+        {
+            return new CreateChat(AccessToken, Title, UserIDs);
+        }
+
+        public static DeleteConversation DeleteConversation(string AccessToken, string PeerID, int Offset = 0, int Count = 10000)
+        {
+            return new DeleteConversation(AccessToken, PeerID, Offset, Count);
+        }
+
+        public static RemoveChatUser RemoveChatUser(string AccessToken, string ChatID, string UserID, string MemberID = "")
+        {
+            return new RemoveChatUser(AccessToken, ChatID, UserID, MemberID);
+        }
     }
 }

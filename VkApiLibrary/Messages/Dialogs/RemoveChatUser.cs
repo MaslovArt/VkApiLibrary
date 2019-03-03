@@ -1,0 +1,34 @@
+﻿namespace VkApiSDK.Messages.Dialogs
+{
+    /// <summary>
+    /// Исключает из мультидиалога пользователя, если текущий пользователь был создателем беседы 
+    /// либо пригласил исключаемого пользователя.
+    /// </summary>
+    public class RemoveChatUser : AddChatUser
+    {
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="AccessToken">Токен доступа</param>
+        /// <param name="ChatID">Идентификатор беседы.</param>
+        /// <param name="UserID">Идентификатор участника, которого необходимо исключить из беседы.</param>
+        /// <param name="MemberID">Идентификатор участника, которого необходимо исключить из беседы.</param>
+        public RemoveChatUser(string AccessToken, string ChatID, string UserID, string MemberID = "")
+            :base(AccessToken, ChatID, UserID)
+        {
+            VkApiMethodName = "messages.removeChatUser";
+            this.MemberID = MemberID;
+        }
+
+        /// <summary>
+        /// Идентификатор участника, которого необходимо исключить из беседы. 
+        /// Для сообществ — идентификатор сообщества со знаком «минус». 
+        /// </summary>
+        public string MemberID { get; set; }
+
+        protected override string GetMethodApiParams()
+        {
+            return base.GetMethodApiParams() + string.Format("&member_id={0}", MemberID);
+        }
+    }
+}

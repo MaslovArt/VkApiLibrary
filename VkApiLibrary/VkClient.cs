@@ -155,8 +155,8 @@ namespace VkApiSDK
         /// <summary>
         /// Отправляет сообщение.
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="message"></param>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <param name="message">Текст</param>
         /// <returns></returns>
         public async Task<string> SendMessage(Peer peer, string message)
         {
@@ -171,6 +171,12 @@ namespace VkApiSDK
             return result.IsResultNull() ? null : result.Response;
         }
 
+        /// <summary>
+        /// Удаляет сообщение
+        /// </summary>
+        /// <param name="MessageIDs">ID сообщений</param>
+        /// <param name="DeleteForAll">Удалять для всех</param>
+        /// <returns></returns>
         public async Task<Dictionary<string, int>> DeleteMessage(IEnumerable<string> MessageIDs, bool DeleteForAll = true)
         {
             var result = await _vkRequest.Dispath<VkResponse<Dictionary<string, int>>>(
@@ -183,6 +189,14 @@ namespace VkApiSDK
             return result.IsResultNull() ? null : result.Response;
         }
 
+        /// <summary>
+        /// Редактирует сообщение
+        /// </summary>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <param name="editMessage">Сообщение для редактирования</param>
+        /// <param name="newText">Текст сообщения</param>
+        /// <param name="attachments">Приложения</param>
+        /// <returns></returns>
         public async Task<bool> EditMessage(Peer peer, Message editMessage, string newText, string attachments = "")
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
@@ -197,6 +211,12 @@ namespace VkApiSDK
             return result != null;
         }
 
+        /// <summary>
+        /// Закрепляет сообщение
+        /// </summary>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <param name="pinMessage">Сообщение для закрепления</param>
+        /// <returns></returns>
         public async Task<bool> PinMessage(Peer peer, Message pinMessage)
         {
             var result = await _vkRequest.Dispath<VkResponse<object>>(
@@ -209,6 +229,11 @@ namespace VkApiSDK
             return result == null;
         }
 
+        /// <summary>
+        /// Открепляет сообщение
+        /// </summary>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <returns></returns>
         public async Task<bool> UnpinMessage(Peer peer)
         { 
             var result = await _vkRequest.Dispath<VkResponse<int>>(
@@ -220,6 +245,11 @@ namespace VkApiSDK
             return result == null ? false : result.Response == 1;
         }
 
+        /// <summary>
+        /// Помечает сообщения как прочитанные
+        /// </summary>
+        /// <param name="fromMessage">Сообщение, начиная с которого пометить как прочитанные</param>
+        /// <returns></returns>
         public async Task<bool> MarkAsRead(Message fromMessage)
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
@@ -232,18 +262,33 @@ namespace VkApiSDK
             return result == null ? false : result.Response == 1;
         }
 
-        public async Task<bool> SetActivity(User user, string activityType)
+        /// <summary>
+        /// Устанавливает активность набора сообщения
+        /// </summary>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <param name="activityType">Тип набора сообщения</param>
+        /// <returns></returns>
+        public async Task<bool> SetActivity(Peer peer, string activityType)
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
                 ApiMessages.SetActivity(
                     AccessToken: _authData.AccessToken,
-                    UserID: user.ID,
+                    UserID: peer.ID,
                     ActivityType: activityType
                 ));
 
             return result != null;
         }
 
+        /// <summary>
+        /// Получает историю переписки
+        /// </summary>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <param name="count">Кол-во сообщений</param>
+        /// <param name="offset">Смещение</param>
+        /// <param name="startMessageID">Начиная с какого получать</param>
+        /// <param name="fields">Дополнительные поля</param>
+        /// <returns></returns>
         public async Task<DialogHistoryData> GetDialogHistory(Peer peer, int count = 20, int offset = 0, int startMessageID = -1, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<DialogHistoryData>>(
@@ -259,6 +304,12 @@ namespace VkApiSDK
             return result == null ? null : result.Response;
         }
 
+        /// <summary>
+        /// Получает информацию о чате
+        /// </summary>
+        /// <param name="chatID">ID чата</param>
+        /// <param name="fields">Дополнительные поля</param>
+        /// <returns></returns>
         public async Task<Chat> GetChat(string chatID, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<Chat>>(
@@ -271,6 +322,12 @@ namespace VkApiSDK
             return result == null ? null : result.Response;
         }
 
+        /// <summary>
+        /// Редактирует название чата
+        /// </summary>
+        /// <param name="chat">Чат</param>
+        /// <param name="newTitle">Новое название</param>
+        /// <returns></returns>
         public async Task<bool> EditChat(Chat chat, string newTitle)
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
@@ -281,6 +338,87 @@ namespace VkApiSDK
                 ));
 
             return result != null;
+        }
+
+        /// <summary>
+        /// Добавляет пользователя в чат
+        /// </summary>
+        /// <param name="user">Пользователь</param>
+        /// <param name="chat">Чат</param>
+        /// <returns></returns>
+        public async Task<bool> AddChatUser(User user, Chat chat)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.AddChatUser(
+                    AccessToken: _authData.AccessToken,
+                    ChatID: chat.ID,
+                    UserID: user.ID
+                ));
+
+            return result == null ? false : result.Response == 1;
+        }
+
+        /// <summary>
+        /// Удаляет пользователя из чата
+        /// </summary>
+        /// <param name="user">Пользователь</param>
+        /// <param name="chat">Чат</param>
+        /// <returns></returns>
+        public async Task<bool> RemoveChatUser(User user, Chat chat)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.RemoveChatUser(
+                    AccessToken: _authData.AccessToken,
+                    ChatID: chat.ID,
+                    UserID: user.ID
+                ));
+
+            return result == null ? false : result.Response == 1;
+        }
+
+        /// <summary>
+        /// Создает чат
+        /// </summary>
+        /// <param name="title">Название чата</param>
+        /// <param name="users">Список пользователей</param>
+        /// <returns></returns>
+        public async Task<int> CreateChat(string title, IEnumerable<User> users)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
+                ApiMessages.CreateChat(
+                    AccessToken: _authData.AccessToken,
+                    Title: title,
+                    UserIDs: users.Select(u => u.ID)
+                ));
+
+            return result == null ? 0 : result.Response;
+        }
+
+        /// <summary>
+        /// Удаляет диалог
+        /// </summary>
+        /// <param name="peer">Идентификатор назначения</param>
+        /// <returns></returns>
+        public async Task<bool> DeleteDialog(Peer peer)
+        {
+            var result = await GetDialogHistory(peer, 1);
+            if (result == null)
+                return false;
+
+            var deleteCallNumber = Math.Ceiling(result.Count / 10000d);
+            //var deleteResponse = 0;
+
+            for (int i = 0; i < deleteCallNumber; i++)
+            {
+                var delRes = await _vkRequest.Dispath<VkResponse<object>>(
+                    ApiMessages.DeleteConversation(
+                        AccessToken: _authData.AccessToken,
+                        PeerID: ConvertIDIfChat(peer)
+                    ));
+                if (delRes == null)
+                    return false;
+            }
+            return true;
         }
 
         #endregion

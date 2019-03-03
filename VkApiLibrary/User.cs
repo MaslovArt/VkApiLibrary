@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using VkApiSDK.Users;
 
 namespace VkApiSDK
 {
