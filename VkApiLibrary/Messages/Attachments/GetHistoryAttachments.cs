@@ -1,16 +1,18 @@
-﻿using VkApiSDK.Requests;
+﻿using System.Collections.Generic;
+using VkApiSDK.Requests;
 
-namespace VkApiSDK.Messages.Dialogs
+namespace VkApiSDK.Messages.Attachments
 {
     /// <summary>
     /// Возвращает материалы диалога или беседы.
     /// </summary>
     public class GetHistoryAttachments : VkApiMethod
     {
-        public GetHistoryAttachments(string AccessToken, string MediaType, string StartFrom, int Count = 30, bool PhotoSizes = false, string[] Fields = null)
+        public GetHistoryAttachments(string AccessToken, string PeerID, string MediaType, string StartFrom, int Count = 30, bool PhotoSizes = false, IEnumerable<string> Fields = null)
             : base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getHistoryAttachments";
+            this.PeerID = PeerID;
             this.MediaType = MediaType;
             this.StartFrom = StartFrom;
             this.Count = Count;
@@ -20,7 +22,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор назначения.
         /// </summary>
-        public string PeedID { get; set; }
+        public string PeerID { get; set; }
 
         /// <summary>
         /// Тип материалов, который необходимо вернуть
@@ -44,7 +46,7 @@ namespace VkApiSDK.Messages.Dialogs
 
         protected override string GetMethodApiParams()
         {
-            return string.Format("&peer_id={0}&media_type={1}&start_from={2}&count={3}&photo_sizes={4}", PeedID,
+            return string.Format("&peer_id={0}&media_type={1}&start_from={2}&count={3}&photo_sizes={4}", PeerID,
                                                                                                          MediaType,
                                                                                                          StartFrom,
                                                                                                          Count,

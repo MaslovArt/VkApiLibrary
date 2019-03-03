@@ -1,6 +1,6 @@
 ﻿namespace VkApiSDK.Requests
 {
-    public class ApiField
+    public class ExtraField
     {
         /// <summary>
         /// Изображение 50x50

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using VkApiSDK.Messages.Attachments;
 using VkApiSDK.Messages.Dialogs;
 
 namespace VkApiSDK.Messages
@@ -23,6 +24,11 @@ namespace VkApiSDK.Messages
         public static GetDialogHistory GetDialogHistory(string AccessToken, string PeerID, int Offset = 0, int Count = 20, int StartMessageID = -1, IEnumerable<string> Fields = null)
         {
             return new GetDialogHistory(AccessToken, PeerID, Offset, Count, StartMessageID, Fields);
+        }
+
+        public static GetHistoryAttachments GetHistoryAttachments(string AccessToken, string PeerID, string MediaType, string StartFrom, int Count = 30, bool PhotoSizes = false, IEnumerable<string> Fields = null)
+        {
+            return new GetHistoryAttachments(AccessToken, PeerID, MediaType, StartFrom, Count, PhotoSizes, Fields);
         }
 
         public static DeleteMessage DeleteMessage(string AccessToken, IEnumerable<string> MessageIDs, bool DeleteForAll = true)

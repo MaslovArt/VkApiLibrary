@@ -6,6 +6,7 @@ using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Errors;
 using VkApiSDK.Messages.Dialogs;
+using VkApiSDK.Messages.Attachments;
 using VkApiSDK.Messages;
 using VkApiSDK.Requests;
 using VkApiSDK.Interfaces;
@@ -94,8 +95,8 @@ namespace VkApiSDK
                     UserID: _authData.UserID,
                     Fields: new string[]
                     {
-                        ApiField.Photo50,
-                        ApiField.IsOnline
+                        ExtraField.Photo50,
+                        ExtraField.IsOnline
                     },
                     Count: count,
                     Offset: offset
@@ -223,7 +224,7 @@ namespace VkApiSDK
                 ApiMessages.Pin(
                     AccessToken: _authData.AccessToken,
                     PeerID: ConvertIDIfChat(peer),
-                    MessageID: pinMessage.ID     
+                    MessageID: pinMessage.ID
                 ));
 
             return result == null;
@@ -235,7 +236,7 @@ namespace VkApiSDK
         /// <param name="peer">Идентификатор назначения</param>
         /// <returns></returns>
         public async Task<bool> UnpinMessage(Peer peer)
-        { 
+        {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
                 ApiMessages.Unpin(
                     AccessToken: _authData.AccessToken,
@@ -299,6 +300,31 @@ namespace VkApiSDK
                     Count: count,
                     StartMessageID: startMessageID,
                     Fields: fields
+                ));
+
+            return result == null ? null : result.Response;
+        }
+
+        /// <summary>
+        /// Получает приложения диалога
+        /// </summary>
+        /// <param name="mediaType">Тип</param>
+        /// <param name="startFrom">Смещение</param>
+        /// <param name="count">Кол-во</param>
+        /// <param name="photoSizes">Возвращать фото в спиц формате</param>
+        /// <param name="fields">Дополнительные поля</param>
+        /// <returns></returns>
+        public async Task<AttachmentData> GetDialogAttachment(Peer peer, string mediaType, string startFrom, int count = 10, bool photoSizes = false, IEnumerable<string> fields = null)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<AttachmentData>>(
+                ApiMessages.GetHistoryAttachments(
+                    AccessToken: _authData.AccessToken,
+                    PeerID: peer.ID,
+                    MediaType: mediaType,
+                    StartFrom: startFrom,
+                    Count: count,
+                    PhotoSizes: photoSizes,
+                    Fields: fields    
                 ));
 
             return result == null ? null : result.Response;
