@@ -76,7 +76,7 @@ namespace VkApiSDK.Requests
         /// </summary>
         /// <param name="items">Массив данных</param>
         /// <returns>Строка</returns>
-        protected string ArrayToString(IEnumerable<string> items)
+        protected string ArrayToString<T>(IEnumerable<T> items)
         {
             return string.Join(",", items);
         }

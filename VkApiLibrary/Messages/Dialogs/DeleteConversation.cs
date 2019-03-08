@@ -17,7 +17,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <param name="PeerID">Идентификатор назначения. </param>
         /// <param name="Offset">Начиная с какого сообщения нужно удалить переписку.</param>
         /// <param name="Count">Сколько сообщений нужно удалить.</param>
-        public DeleteConversation(string AccessToken, string PeerID, int Offset = 0, int Count = 10000)
+        public DeleteConversation(string AccessToken, int PeerID, int Offset = 0, int Count = 10000)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.deleteConversation";
@@ -29,7 +29,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор назначения. 
         /// </summary>
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         /// <summary>
         /// Начиная с какого сообщения нужно удалить переписку. 

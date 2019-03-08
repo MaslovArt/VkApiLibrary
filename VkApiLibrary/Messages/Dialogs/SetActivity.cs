@@ -7,7 +7,7 @@ namespace VkApiSDK.Messages.Dialogs
     /// </summary>
     public class SetActivity : VkApiMethod
     {
-        public SetActivity(string AccessToken, string PeerID, string Type = ActivityType.Typing)
+        public SetActivity(string AccessToken, int PeerID, string Type = ActivityType.Typing)
             : base(AccessToken)
         {
             VkApiMethodName = "messages.setActivity";
@@ -18,7 +18,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор пользователя.
         /// </summary>
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         /// <summary>
         /// Тип сообщения.

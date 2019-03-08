@@ -9,7 +9,6 @@ using VkApiSDK.Messages.Dialogs;
 using VkApiSDK.Messages.Attachments;
 using VkApiSDK.Messages;
 using VkApiSDK.Requests;
-using VkApiSDK.Interfaces;
 
 namespace VkApiSDK
 {
@@ -30,38 +29,19 @@ namespace VkApiSDK
 
         #endregion
 
-        public VkClient(string AppID, string Scope, IDataProvider DataProvider = null)
+        public VkClient(AuthData AuthData)
         {
-            this.AppID = AppID;
-            this.Scope = Scope;
-            this.DataProvider = DataProvider;
-
+            _authData = AuthData;
             _vkRequest = new VkRequest();
         }
 
         #region Properties
 
-        public string AppID { get; private set; }
-
-        public string Scope { get; private set; }
-
-        public IDataProvider DataProvider { get; set; }
+        public string AccessToken => _authData.AccessToken;
 
         #endregion
 
         #region Vk api methods
-
-        /// <summary>
-        /// Авторизация
-        /// </summary>
-        /// <returns></returns>
-        public bool Auth(Func<string, string, string, AuthData> AuthMethod)
-        {
-            VkAutharization vka = new VkAutharization(AppID, Scope, DataProvider, AuthMethod);
-            _authData = vka.Auth();
-
-            return _authData != null;
-        }
 
         /// <summary>
         /// Получает список диалогов
@@ -78,7 +58,7 @@ namespace VkApiSDK
                     Count: count
                 ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -102,22 +82,22 @@ namespace VkApiSDK
                     Offset: offset
                ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
         /// Получает список id онлайн друзей
         /// </summary>
         /// <returns>Массив айди пользователей</returns>
-        public async Task<string[]> GetOnlineFriendIDsAsync()
+        public async Task<int[]> GetOnlineFriendIDsAsync()
         {
-            var result = await _vkRequest.Dispath<VkResponse<string[]>>(
+            var result = await _vkRequest.Dispath<VkResponse<int[]>>(
                 ApiFriends.GetOnlineFriends(
                     AccessToken: _authData.AccessToken,
                     UserID: _authData.UserID
                 ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -125,7 +105,7 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="userIDs">Набор id</param>
         /// <returns>Информацию о пользователя</returns>
-        public async Task<User[]> GetUsersAsync(IEnumerable<string> userIDs, IEnumerable<string> fields = null)
+        public async Task<User[]> GetUsersAsync(IEnumerable<int> userIDs, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<User[]>>(
                 ApiUsers.Get(
@@ -134,7 +114,7 @@ namespace VkApiSDK
                     Fields: fields
                 ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -159,9 +139,9 @@ namespace VkApiSDK
         /// <param name="peer">Идентификатор назначения</param>
         /// <param name="message">Текст</param>
         /// <returns></returns>
-        public async Task<string> SendMessage(Peer peer, string message)
+        public async Task<int> SendMessage(Peer peer, string message)
         {
-            var result = await _vkRequest.Dispath<VkResponse<string>>(
+            var result = await _vkRequest.Dispath<VkResponse<int>>(
                 ApiMessages.SendMessage(
                     AccessToken: _authData.AccessToken,
                     PeedID: ConvertIDIfChat(peer),
@@ -169,7 +149,7 @@ namespace VkApiSDK
                     Attachments: ""
                 ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result != null ? result.Response : -1;
         }
 
         /// <summary>
@@ -178,16 +158,16 @@ namespace VkApiSDK
         /// <param name="MessageIDs">ID сообщений</param>
         /// <param name="DeleteForAll">Удалять для всех</param>
         /// <returns></returns>
-        public async Task<Dictionary<string, int>> DeleteMessage(IEnumerable<string> MessageIDs, bool DeleteForAll = true)
+        public async Task<Dictionary<string, int>> DeleteMessage(IEnumerable<VkMessage> Messages, bool DeleteForAll = true)
         {
             var result = await _vkRequest.Dispath<VkResponse<Dictionary<string, int>>>(
                 ApiMessages.DeleteMessage(
                     AccessToken: _authData.AccessToken,
-                    MessageIDs: MessageIDs,
+                    MessageIDs: Messages.Select(m => m.ID),
                     DeleteForAll: DeleteForAll
                 ));
 
-            return result.IsResultNull() ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -198,7 +178,7 @@ namespace VkApiSDK
         /// <param name="newText">Текст сообщения</param>
         /// <param name="attachments">Приложения</param>
         /// <returns></returns>
-        public async Task<bool> EditMessage(Peer peer, Message editMessage, string newText, string attachments = "")
+        public async Task<bool> EditMessage(Peer peer, VkMessage editMessage, string newText, string attachments = "")
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
                 ApiMessages.EditMessage(
@@ -218,7 +198,7 @@ namespace VkApiSDK
         /// <param name="peer">Идентификатор назначения</param>
         /// <param name="pinMessage">Сообщение для закрепления</param>
         /// <returns></returns>
-        public async Task<bool> PinMessage(Peer peer, Message pinMessage)
+        public async Task<bool> PinMessage(Peer peer, VkMessage pinMessage)
         {
             var result = await _vkRequest.Dispath<VkResponse<object>>(
                 ApiMessages.Pin(
@@ -251,7 +231,7 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="fromMessage">Сообщение, начиная с которого пометить как прочитанные</param>
         /// <returns></returns>
-        public async Task<bool> MarkAsRead(Message fromMessage)
+        public async Task<bool> MarkAsRead(VkMessage fromMessage)
         {
             var result = await _vkRequest.Dispath<VkResponse<int>>(
                 ApiMessages.MarkAsRead(
@@ -302,7 +282,7 @@ namespace VkApiSDK
                     Fields: fields
                 ));
 
-            return result == null ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -327,7 +307,7 @@ namespace VkApiSDK
                     Fields: fields    
                 ));
 
-            return result == null ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -336,7 +316,7 @@ namespace VkApiSDK
         /// <param name="chatID">ID чата</param>
         /// <param name="fields">Дополнительные поля</param>
         /// <returns></returns>
-        public async Task<Chat> GetChat(string chatID, IEnumerable<string> fields = null)
+        public async Task<Chat> GetChat(int chatID, IEnumerable<string> fields = null)
         {
             var result = await _vkRequest.Dispath<VkResponse<Chat>>(
                 ApiMessages.GetChat(
@@ -345,7 +325,7 @@ namespace VkApiSDK
                     Fields: fields
                 ));
 
-            return result == null ? null : result.Response;
+            return result?.Response;
         }
 
         /// <summary>
@@ -451,10 +431,10 @@ namespace VkApiSDK
 
         #region Private methods
 
-        private string ConvertIDIfChat(Peer peer)
+        private int ConvertIDIfChat(Peer peer)
         {
             if (peer.Type == "chat")
-               return (2000000000 + Convert.ToInt32(peer.ID)).ToString();
+               return 2000000000 + peer.ID;
             return peer.ID;
         }
 
@@ -487,10 +467,10 @@ namespace VkApiSDK
             return result;
         }
 
-        private IEnumerable<string> getUserIDs(DialogsData dd)
+        private IEnumerable<int> getUserIDs(DialogsData dd)
         {
             return dd.Dialogs.Where(d => d.Type.Equals("user"))
-                             .Select(d => d.ID.ToString());
+                             .Select(d => d.ID);
         }
 
         #endregion

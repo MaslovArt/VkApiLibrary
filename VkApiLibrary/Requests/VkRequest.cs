@@ -22,12 +22,13 @@ namespace VkApiSDK.Requests
         /// <typeparam name="T">Тип ответа</typeparam>
         /// <param name="vkApiMethod">Api метод</param>
         /// <returns>Объект json ответа</returns>
-        public async Task<T> Dispath<T>(IVkApiMethod vkApiMethod, Action<Error> OnRequestError = null) where T : class, IVkResponse
+        public async Task<T> Dispath<T>(IVkApiMethod vkApiMethod, Action<Error> OnRequestError = null) where T : class
         {
             string reqUri = vkApiMethod.GetRequestString();
             var responseStringJSON = await client.GetStringAsync(reqUri);
 
             Debug.WriteLine("REqURL " + reqUri);
+            Debug.WriteLine(responseStringJSON);
 
             T result = null;
 
@@ -43,6 +44,7 @@ namespace VkApiSDK.Requests
             {
                 result = JsonConvert.DeserializeObject<T>(responseStringJSON);
             }
+
 
             return result;
         }

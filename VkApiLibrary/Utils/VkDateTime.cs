@@ -4,12 +4,14 @@ namespace VkApiSDK.Utils
 {
     public class VkDateTime
     {
-        private DateTime unixEpoch = new DateTime(1970, 1, 1, 3, 0, 0, 0, DateTimeKind.Utc);
+        private DateTime unixEpoch;
         private DateTime dateTime;
         private long timestamp;
 
         public VkDateTime(long unixTimestamp)
         {
+            var utcOffset = TimeZoneInfo.Local.BaseUtcOffset.Hours;
+            unixEpoch = new DateTime(1970, 1, 1, utcOffset, 0, 0, 0, DateTimeKind.Utc);
             timestamp = unixTimestamp;
             dateTime = unixEpoch.AddSeconds(unixTimestamp);
         }
@@ -30,11 +32,11 @@ namespace VkApiSDK.Utils
 
         private string getTime()
         {
-            var diff = DateTime.Now - dateTime;
+            var diff = DateTime.Now.Day - dateTime.Day;
             string result = "";
-            if (diff.Days <= 2)
+            if (diff <= 2)
             {
-                switch (diff.Days)
+                switch (diff)
                 {
                     case 0: result += "Сегодня"; break;
                     case 1: result += "Вчера"; break;
@@ -45,7 +47,7 @@ namespace VkApiSDK.Utils
             {
                 result = dateTime.Day + " " + dateTime.ToString("MMMM");
             }
-            result += " в " + dateTime.ToString();
+            result += " в " + dateTime.Hour + ":" + dateTime.Minute;
 
             return result;
         }

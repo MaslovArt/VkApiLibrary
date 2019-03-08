@@ -8,7 +8,7 @@ namespace VkApiSDK.Messages.Dialogs
     /// </summary>
     public class DeleteMessage : VkApiMethod
     {
-        public DeleteMessage(string AccessToken, IEnumerable<string> MessageIDs, bool DeleteForAll = true)
+        public DeleteMessage(string AccessToken, IEnumerable<int> MessageIDs, bool DeleteForAll = true)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.delete";
@@ -19,7 +19,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Cписок идентификаторов сообщений
         /// </summary>
-        public IEnumerable<string> MessageIDs { get; set; }
+        public IEnumerable<int> MessageIDs { get; set; }
 
         /// <summary>
         /// Cообщение нужно удалить для получателей (если с момента отправки сообщения прошло не более 24 часов ). 

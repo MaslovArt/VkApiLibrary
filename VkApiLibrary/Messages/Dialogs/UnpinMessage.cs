@@ -12,7 +12,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// </summary>
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="PeerID">Идентификатор назначения. </param>
-        public UnpinMesaage(string AccessToken, string PeerID)
+        public UnpinMesaage(string AccessToken, int PeerID)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.unpin";
@@ -22,7 +22,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор назначения. 
         /// </summary>
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         protected override string GetMethodApiParams()
         {

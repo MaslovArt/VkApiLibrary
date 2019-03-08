@@ -13,7 +13,7 @@ namespace VkApiSDK.Friends
         private int count = 5000,
                     offset = 0;
 
-        public GetFriends(string AccessToken, string UserID, string[] Fields = null, string Order = FriendOrder.Hints, int Count = 5000, int Offset = 0)
+        public GetFriends(string AccessToken, int UserID, string[] Fields = null, string Order = FriendOrder.Hints, int Count = 5000, int Offset = 0)
             :base(AccessToken, Fields)
         {
             VkApiMethodName = "friends.get";
@@ -26,7 +26,7 @@ namespace VkApiSDK.Friends
         /// <summary>
         /// Идентификатор пользователя, для которого необходимо получить список друзей. 
         /// </summary>
-        public string UserID { get; set; }
+        public int UserID { get; set; }
 
         /// <summary>
         /// Порядок, в котором нужно вернуть список друзей. 

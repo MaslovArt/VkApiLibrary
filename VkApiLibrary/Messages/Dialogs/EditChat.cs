@@ -11,7 +11,7 @@
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="ChatID">Id чата</param>
         /// <param name="Title">Новый заголовок</param>
-        public EditChat(string AccessToken, string ChatID, string Title)
+        public EditChat(string AccessToken, int ChatID, string Title)
             :base(AccessToken, ChatID)
         {
             VkApiMethodName = "messages.editChat";

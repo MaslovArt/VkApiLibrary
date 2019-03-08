@@ -12,7 +12,7 @@ namespace VkApiSDK
         public string Expires { get; set; }
 
         [JsonProperty("user_id")]
-        public string UserID { get; set; }
+        public int UserID { get; set; }
 
         public override string ToString()
         {

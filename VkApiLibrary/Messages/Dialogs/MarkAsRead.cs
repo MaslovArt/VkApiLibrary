@@ -13,7 +13,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="PeerID">Идентификатор назначения</param>
         /// <param name="StartMessageID">При передаче этого параметра будут помечены как прочитанные все сообщения, начиная с данного.</param>
-        public MarkAsRead(string AccessToken, string PeerID, string StartMessageID)
+        public MarkAsRead(string AccessToken, int PeerID, int StartMessageID)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.markAsRead";
@@ -24,12 +24,12 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор назначения.
         /// </summary>
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         /// <summary>
         /// При передаче этого параметра будут помечены как прочитанные все сообщения, начиная с данного. 
         /// </summary>
-        public string StartMessageID { get; set; }
+        public int StartMessageID { get; set; }
 
         protected override string GetMethodApiParams()
         {

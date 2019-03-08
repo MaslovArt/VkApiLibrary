@@ -17,12 +17,7 @@ namespace VkApiSDK
     public class VkAutharization
     {
         private const string AUTH_URL = "https://oauth.vk.com/authorize?client_id={0}&display=page&redirect_uri=https://oauth.vk.com/blank.html&display=page&scope={1}&response_type=token&v=5.92";
-
-        private string         _appID,
-                               _scope,
-                               _dataName = "authdata";
-        private AuthData       _authData;
-        private Func<string, string, string, AuthData> _authMethod;
+        private const string AUTH_DATA_PATH = "authdata";
         private IDataProvider DataProvider;
 
         /// <summary>
@@ -30,41 +25,62 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="AppID">ID вк приложения</param>
         /// <param name="Scope">Список разрещений.</param>
-        public VkAutharization(string AppID, string Scope, IDataProvider DataProvider, Func<string, string, string, AuthData> AuthMethod)
+        /// <param name="DataProvider">Способ сохранения информации.</param>
+        public VkAutharization(string AppID, string Scope, IDataProvider DataProvider = null)
         {
-            _authMethod = AuthMethod;
-            _appID = AppID;
-            _scope = Scope;
+            this.AppID = AppID;
+            this.Scope = Scope;
+            this.DataProvider = DataProvider;
         }
 
-        public AuthData AuthData
-        {
-            get { return _authData; }
-            private set { _authData = value; }
-        }
+        /// <summary>
+        /// Данные для доступа к апи
+        /// </summary>
+        public AuthData AuthData { get; private set; }
+
+        /// <summary>
+        /// ID приложения Вк
+        /// </summary>
+        public string AppID { get; private set; }
+
+        /// <summary>
+        /// Список разрешений
+        /// </summary>
+        public string Scope { get; private set; }
 
         /// <summary>
         /// Выполняет авторизацию
         /// </summary>
-        /// <param name="OnAuthError"></param>
-        /// <returns></returns>
-        public AuthData Auth()
+        /// <param name="AuthMethod">Метод, который осуществляет переход по ссылке для подтверждения доступа к аккаунту</param>
+        /// <returns>Токен</returns>
+        public AuthData Auth(Func<string, AuthData> AuthMethod)
         {
-            if (DataProvider != null)
-            {
-                object obj;
-                if(DataProvider.LoadObject(out obj, _dataName))
-                    AuthData = obj as AuthData;
-            }
+            AuthData = AuthMethod(string.Format(AUTH_URL, AppID, Scope));
 
-            if (AuthData == null)
-            {
-                AuthData = _authMethod(AUTH_URL, _appID, _scope);
-                if (DataProvider != null)
-                    DataProvider.SaveObject(AuthData, _dataName);
-            }
+            if (DataProvider != null && AuthData != null)
+                DataProvider.SaveObject(AuthData, AUTH_DATA_PATH);
 
             return AuthData;
+        }
+
+        /// <summary>
+        /// Пытается получить токен доступа из памяти
+        /// </summary>
+        /// <returns>Токен</returns>
+        public AuthData TryGetAuthFromMemory()
+        {
+            if (DataProvider == null) return null;
+
+            AuthData ad;
+            bool isLoad = DataProvider.LoadObject(out ad, AUTH_DATA_PATH);
+
+            if(isLoad)
+            {
+                AuthData = ad;
+                return AuthData;
+            }
+
+            return null;
         }
     }
 }

@@ -8,7 +8,7 @@ namespace VkApiSDK.Users
     /// </summary>
     public class GetUsers : VkApiMethod
     {
-        public GetUsers(string AccessToken, IEnumerable<string> UserIDs, IEnumerable<string> Fields = null)
+        public GetUsers(string AccessToken, IEnumerable<int> UserIDs, IEnumerable<string> Fields = null)
             :base(AccessToken, Fields)
         {
             VkApiMethodName = "users.get";
@@ -18,7 +18,7 @@ namespace VkApiSDK.Users
         /// <summary>
         /// Идентификаторы пользователей или их короткие имена.
         /// </summary>
-        public IEnumerable<string> UserIDs { get; set; }
+        public IEnumerable<int> UserIDs { get; set; }
 
         protected override string GetMethodApiParams()
         {

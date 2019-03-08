@@ -16,12 +16,11 @@ namespace VkApiSDK.LongPoll
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="NeedPts">Возвращать поле pts</param>
         /// <param name="LpVersion">Версия для подключения к Long Poll</param>
-        public GetLongPollServer(string AccessToken, bool NeedPts = true, string LpVersion = "3")
+        public GetLongPollServer(string AccessToken, bool NeedPts = true)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.getLongPollServer";
             this.NeedPts = NeedPts;
-            this.LpVersion = LpVersion;
         }
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace VkApiSDK.LongPoll
         /// <summary>
         /// Версия для подключения к Long Poll
         /// </summary>
-        public string LpVersion { get; set; }
+        public string LpVersion { get; private set; } = "2";
 
         protected override string GetMethodApiParams()
         {

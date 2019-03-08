@@ -18,7 +18,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="ChatID">Идентификатор беседы.</param>
         /// <param name="Fields">Список дополнительных полей профилей, которые необходимо вернуть.</param>
-        public GetChat(string AccessToken, string ChatID, IEnumerable<string> Fields = null)
+        public GetChat(string AccessToken, int ChatID, IEnumerable<string> Fields = null)
             :base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getChat";
@@ -28,7 +28,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор беседы. 
         /// </summary>
-        public string ChatID { get; set; }
+        public int ChatID { get; set; }
 
         protected override string GetMethodApiParams()
         {

@@ -13,7 +13,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="ChatID">Идентификатор беседы. </param>
         /// <param name="UserID">Идентификатор пользователя, которого необходимо включить в беседу.</param>
-        public AddChatUser(string AccessToken, string ChatID, string UserID)
+        public AddChatUser(string AccessToken, int ChatID, int UserID)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.addChatUser";
@@ -24,12 +24,12 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Идентификатор беседы. 
         /// </summary>
-        public string ChatID { get; set; }
+        public int ChatID { get; set; }
 
         /// <summary>
         /// Идентификатор пользователя, которого необходимо включить в беседу.
         /// </summary>
-        public string UserID { get; set; }
+        public int UserID { get; set; }
 
         protected override string GetMethodApiParams()
         {

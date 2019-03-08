@@ -5,12 +5,12 @@ using VkApiSDK.Messages.Attachments;
 
 namespace VkApiSDK
 {
-    public class Message
+    public class VkMessage
     {
         private VkDateTime data;
 
         [JsonProperty("id")]
-        public string ID { get; set; }
+        public int ID { get; set; }
 
         [JsonProperty("date")]
         public string Date
@@ -23,10 +23,10 @@ namespace VkApiSDK
         }
 
         [JsonProperty("from_id")]
-        public string FromID { get; set; }
+        public int FromID { get; set; }
 
         [JsonProperty("peer_id")]
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         [JsonProperty("out")]
         public int Out { get; set; }
@@ -35,7 +35,7 @@ namespace VkApiSDK
         public string Text { get; set; }
 
         [JsonProperty("fwd_messages")]
-        public Message[] ForwardMessages { get; set; }
+        public VkMessage[] ForwardMessages { get; set; }
 
         [JsonProperty("attachments")]
         public Attachment[] Attachments { get; set; }

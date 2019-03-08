@@ -7,19 +7,19 @@ namespace VkApiSDK
     [JsonConverter(typeof(JsonPathConverter))]
     public class Dialog : Peer
     {
-        private string _id;
+        private int _id;
 
         [JsonProperty("conversation.peer.type")]
         public override string Type { get; set; }
 
         [JsonProperty("conversation.peer.id")]
-        public override string ID
+        public override int ID
         {
             get { return _id; }
             set
             {
-                if (value.Length == 10)
-                    _id = ((Convert.ToInt32(value)) - 2000000000).ToString();
+                if (value > 2000000000)
+                    _id = value - 2000000000;
                 else
                     _id = value;
             }
@@ -32,7 +32,7 @@ namespace VkApiSDK
         public string Title { get; set; }
 
         [JsonProperty("last_message")]
-        public Message LastMessage { get; set; }
+        public VkMessage LastMessage { get; set; }
 
         [JsonProperty("conversation.can_write.allowed")]
         public bool CanWrite { get; set; }

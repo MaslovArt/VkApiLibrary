@@ -11,17 +11,18 @@
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="PeerID">Идентификатор назначения. </param>
         /// <param name="MessageID">Идентификатор сообщения, которое нужно закрепить.</param>
-        public PinMessage(string AccessToken, string PeerID, string MessageID)
+        public PinMessage(string AccessToken, int PeerID, int MessageID)
             :base(AccessToken, PeerID)
         {
             VkApiMethodName = "messages.pin";
             this.MessageID = MessageID;
+
         }
 
         /// <summary>
         /// Идентификатор сообщения, которое нужно закрепить.
         /// </summary>
-        public string MessageID { get; set; }
+        public int MessageID { get; set; }
 
         protected override string GetMethodApiParams()
         {

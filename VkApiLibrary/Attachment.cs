@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using VkApiSDK.Messages.Attachments;
 
-namespace VkApiSDK.Messages.Attachments
+namespace VkApiSDK
 {
     public class Attachment
     {

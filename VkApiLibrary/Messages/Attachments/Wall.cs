@@ -18,5 +18,10 @@ namespace VkApiSDK.Messages.Attachments
 
         [JsonProperty("photo")]
         public Picture[] Photos { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}{1}_{2}", AttachmentType.Wall, OwnerID, ID);
+        }
     }
 }

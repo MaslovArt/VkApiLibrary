@@ -8,7 +8,7 @@ namespace VkApiSDK.Messages.Attachments
     /// </summary>
     public class GetHistoryAttachments : VkApiMethod
     {
-        public GetHistoryAttachments(string AccessToken, string PeerID, string MediaType, string StartFrom, int Count = 30, bool PhotoSizes = false, IEnumerable<string> Fields = null)
+        public GetHistoryAttachments(string AccessToken, int PeerID, string MediaType, string StartFrom, int Count = 30, bool PhotoSizes = false, IEnumerable<string> Fields = null)
             : base(AccessToken, Fields)
         {
             VkApiMethodName = "messages.getHistoryAttachments";
@@ -22,7 +22,7 @@ namespace VkApiSDK.Messages.Attachments
         /// <summary>
         /// Идентификатор назначения.
         /// </summary>
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         /// <summary>
         /// Тип материалов, который необходимо вернуть

@@ -6,7 +6,7 @@ namespace VkApiSDK
     public class User : Peer
     {
         [JsonProperty("id")]
-        public override string ID { get; set; }
+        public override int ID { get; set; }
 
         public override string Type { get; set; } = "user";
 

@@ -1,11 +1,12 @@
-﻿namespace VkApiSDK.Messages.Dialogs
+﻿
+namespace VkApiSDK.Messages.Dialogs
 {
     /// <summary>
     /// Редактирует сообщение.
     /// </summary>
     public class EditMessage : SendMessage
     {
-        public EditMessage(string AccessToken, string PeerID, string MessageID, string Message, string Attachments)
+        public EditMessage(string AccessToken, int PeerID, int MessageID, string Message, string Attachments)
             :base(AccessToken, PeerID, Message, Attachments)
         {
             VkApiMethodName = "messages.edit";
@@ -15,7 +16,7 @@
         /// <summary>
         /// Идентификатор сообщения.
         /// </summary>
-        public string MessageID { get; set; }
+        public int MessageID { get; set; }
 
         protected override string GetMethodApiParams()
         {

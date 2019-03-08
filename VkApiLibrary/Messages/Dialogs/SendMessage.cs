@@ -9,25 +9,20 @@ namespace VkApiSDK.Messages.Dialogs
     /// </summary>
     public class SendMessage : VkApiMethod
     {
-        public SendMessage(string AccessToken, string PeerID, string Message, string Attachments, IEnumerable<string> ForwardMessageIDs = null)
+        public SendMessage(string AccessToken, int PeerID, string Message, string Attachments, IEnumerable<int> ForwardMessageIDs = null)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.send";
             this.PeerID = PeerID;
             this.Message = Message;
             this.Attachments = Attachments;
-            this.ForwardMessageIDs = ForwardMessageIDs ?? new string[] { };
+            this.ForwardMessageIDs = ForwardMessageIDs ?? new int[] { };
         }
-
-        /// <summary>
-        /// Идентификатор пользователя, которому отправляется сообщение.
-        /// </summary>
-        public string UserID { get; set; }
 
         /// <summary>
         /// Идентификатор назначения. 
         /// </summary>
-        public string PeerID { get; set; }
+        public int PeerID { get; set; }
 
         private int RandomID
         {
@@ -49,7 +44,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// отображаться в теле письма у получателя. Не более 100 значений на верхнем уровне, максимальный уровень 
         /// вложенности: 45, максимальное количество пересылаемых сообщений 500
         /// </summary>
-        public IEnumerable<string> ForwardMessageIDs { get; set; }
+        public IEnumerable<int> ForwardMessageIDs { get; set; }
 
         protected override string GetMethodApiParams()
         {

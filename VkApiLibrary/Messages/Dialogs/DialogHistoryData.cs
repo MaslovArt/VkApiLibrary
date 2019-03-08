@@ -8,6 +8,6 @@ namespace VkApiSDK.Messages.Dialogs
         public int Count { get; set; }
 
         [JsonProperty("items")]
-        public Message[] Messages { get; set; }
+        public VkMessage[] Messages { get; set; }
     }
 }

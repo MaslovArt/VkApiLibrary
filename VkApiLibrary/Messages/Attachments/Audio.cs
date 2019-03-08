@@ -16,5 +16,10 @@ namespace VkApiSDK.Messages.Attachments
 
         [JsonProperty("is_explicit")]
         public bool Is_explicit { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}{1}_{2}", AttachmentType.Audio, OwnerID, ID);
+        }
     }
 }

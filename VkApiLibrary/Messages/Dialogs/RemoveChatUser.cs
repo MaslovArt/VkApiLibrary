@@ -12,12 +12,10 @@
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="ChatID">Идентификатор беседы.</param>
         /// <param name="UserID">Идентификатор участника, которого необходимо исключить из беседы.</param>
-        /// <param name="MemberID">Идентификатор участника, которого необходимо исключить из беседы.</param>
-        public RemoveChatUser(string AccessToken, string ChatID, string UserID, string MemberID = "")
+        public RemoveChatUser(string AccessToken, int ChatID, int UserID)
             :base(AccessToken, ChatID, UserID)
         {
             VkApiMethodName = "messages.removeChatUser";
-            this.MemberID = MemberID;
         }
 
         /// <summary>
@@ -28,7 +26,7 @@
 
         protected override string GetMethodApiParams()
         {
-            return base.GetMethodApiParams() + string.Format("&member_id={0}", MemberID);
+            return base.GetMethodApiParams();
         }
     }
 }

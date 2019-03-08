@@ -5,7 +5,7 @@ namespace VkApiSDK.Messages
     public class Chat : Peer
     {
         [JsonProperty("id")]
-        public override string ID { get; set; }
+        public override int ID { get; set; }
 
         [JsonProperty("type")]
         public override string Type { get; set; } = "chat";
@@ -14,7 +14,7 @@ namespace VkApiSDK.Messages
         public string Title { get; set; }
 
         [JsonProperty("admin_id")]
-        public string AdminID { get; set; }
+        public int AdminID { get; set; }
 
         [JsonProperty("users")]
         public User[] UserIDs { get; set; }

@@ -2,7 +2,7 @@
 
 namespace VkApiSDK.LongPoll
 {
-    public class LongPollData
+    public class LongPollConnectionData
     {
         [JsonProperty("key")]
         public string Key { get; set; }

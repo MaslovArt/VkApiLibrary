@@ -14,7 +14,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <param name="AccessToken">Токен доступа</param>
         /// <param name="Title">Название беседы.</param>
         /// <param name="UserIDs">Идентификаторы пользователей, которых нужно включить в мультидиалог.</param>
-        public CreateChat(string AccessToken, string Title, IEnumerable<string> UserIDs)
+        public CreateChat(string AccessToken, string Title, IEnumerable<int> UserIDs)
             :base(AccessToken)
         {
             VkApiMethodName = "messages.createChat";
@@ -33,7 +33,7 @@ namespace VkApiSDK.Messages.Dialogs
         /// <summary>
         /// Название беседы. 
         /// </summary>
-        public IEnumerable<string> UserIDs { get; set; }
+        public IEnumerable<int> UserIDs { get; set; }
 
         protected override string GetMethodApiParams()
         {
