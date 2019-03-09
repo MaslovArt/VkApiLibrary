@@ -117,7 +117,7 @@ namespace VkApiSDK.Messages
                     MessageID: pinMessage.ID
                 ));
 
-            return result == null;
+            return result != null;
         }
 
         /// <summary>

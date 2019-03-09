@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using VkApiSDK.Users;
 
 namespace VkApiSDK.Models.Friends
 {

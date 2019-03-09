@@ -5,9 +5,9 @@ namespace VkApiSDK.Models.Friends
     public class OnlineFriendsData
     {
         [JsonProperty("online")]
-        public string[] OnlineIDs { get; set; }
+        public int[] OnlineIDs { get; set; }
 
         [JsonProperty("online_mobile")]
-        public string[] OnlineMobileIDs { get; set; }
+        public int[] OnlineMobileIDs { get; set; }
     }
 }

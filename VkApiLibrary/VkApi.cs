@@ -4,6 +4,7 @@ using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Messages;
 using VkApiSDK.LongPoll;
+using VkApiSDK.Account;
 using System;
 using System.Threading.Tasks;
 using VkApiSDK.Model.Messages;
@@ -109,6 +110,11 @@ namespace VkApiSDK
         public ChatMethods Chats { get; private set; }
 
         /// <summary>
+        /// Методы для работы с акаунтом
+        /// </summary>
+        public AccountMethods Account { get; private set; }
+
+        /// <summary>
         /// Методы для работы с новыми событиями
         /// </summary>
         public LongPollManager LongPollService { get; private set; }
@@ -173,7 +179,6 @@ namespace VkApiSDK
                              .Select(d => d.ID);
         }
 
-
         private void initApiMethodGroups()
         {
             vkRequest = new VkRequest();
@@ -181,6 +186,7 @@ namespace VkApiSDK
             Users = new UserMethods(AuthData, vkRequest);
             Messages = new MessageMethods(AuthData, vkRequest);
             Chats = new ChatMethods(AuthData, vkRequest);
+            Account = new AccountMethods(AuthData, vkRequest);
         }
 
         #endregion
