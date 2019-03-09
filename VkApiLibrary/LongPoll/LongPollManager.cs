@@ -5,6 +5,8 @@ using System.Threading;
 using VkApiSDK.Requests;
 using Newtonsoft.Json;
 using static System.Convert;
+using VkApiSDK.Models.LongPoll;
+using VkApiSDK.LongPoll.Methods;
 
 namespace VkApiSDK.LongPoll
 {
@@ -24,71 +26,79 @@ namespace VkApiSDK.LongPoll
         /// Инициализирует новый экземпляр класса <c>LongPollManager</c>
         /// </summary>
         /// <param name="aData">Данные для доступа к апи</param>
-        /// <param name="lpMode">Мод
-        /// <para>
-        /// Сумма кодов опций из списка:
-        /// <list type="modes">
-        /// <item>2 — получать вложения;</item>
-        /// <item>8 — возвращать расширенный набор событий;</item>
-        /// <item>32 — возвращать <c>pts</c>;</item>
-        /// <item>64 — в событии с кодом 8 (друг стал онлайн) возвращать дополнительные данные в поле <c>$extra</c>;</item>
-        /// <item>128 — возвращать поле random_id;</item>
-        /// </list>
-        /// </para>
-        /// </param>
-        public LongPollManager(AuthData aData, int lpMode = 2)
+        public LongPollManager(AuthData aData)
         {
-            this.lpMode = lpMode;
+            lpMode = 2;
             AccessToken = aData.AccessToken;
         }
 
         #region Events
 
         /// <summary>
+        /// Происходит при изменении кол-ва непрочитанных сообщений
+        /// <para>handler(unreadCount)</para>
+        /// </summary>
+        public event Action<int> OnUnreadMessageChange;
+
+        /// <summary>
         /// Происходит когда друг становится онлайн
+        /// <para>handler(userID)</para>
         /// </summary>
         public event Action<int> OnNewOnline;
 
         /// <summary>
         /// Происходит когда друг становится оффлайн
+        /// <para>handler(userID)</para>
         /// </summary>
         public event Action<int> OnNewOffline;
 
         /// <summary>
-        /// Происходит когда приходит новое собщение
+        /// Происходит когда приходит новое собщение от пользователя
+        /// <para>handler(userID, text, extraFields)</para>
         /// </summary>
-        public event Action<int, string, Dictionary<string, string>> OnNewMessage;
+        public event Action<int, string, Dictionary<string, string>> OnNewMessageFromUser;
+
+        /// <summary>
+        /// Происходит когда приходит новое собщение из чата
+        /// <para>handler(chatID, userID, text, extraFields)</para>
+        /// </summary>
+        public event Action<int, int, string, Dictionary<string, string>> OnNewMessageFromChat;
 
         /// <summary>
         /// Происходит когда сообщение удалено
+        /// <para>handler(messageID, userID)</para>
         /// </summary>
         public event Action<int, int> OnMessageDelete;
 
         /// <summary>
         /// Происходит когда сообщение становится прочитанным 
+        /// <para>handler(messageID, peerID)</para>
         /// </summary>
         public event Action<int, int> OnMessageRead;
 
         /// <summary>
         /// Происходит когда сообщение было отридактированно
+        /// <para>handler(messageID, peerID, text)</para>
         /// </summary>
-        /// <remarks>fdd</remarks>
         public event Action<int, int, string> OnMessageEdit;
 
         /// <summary>
         /// Происходит когда пользователь начинает набирать сообщение
+        /// <para>handler(userID)</para>
         /// </summary>
         public event Action<int> OnStartTyping;
 
         /// <summary>
         /// Происходит когда пользователь начинает набирать сообщение в чате
+        /// <para>handler(chatID, userID)</para>
         /// </summary>
         public event Action<int, int> OnStartTypingInChat;
 
         /// <summary>
         /// Происходит когда изменяется информация о чате
+        /// <para>handler(chatID, code)</para>
         /// </summary>
-        public event Action<int> OnChatEditing;
+        public event Action<int, int> OnChatEditing;
 
         #endregion
 
@@ -104,69 +114,94 @@ namespace VkApiSDK.LongPoll
 
         private void ChatEdit(object[] update)
         {
-            if (OnChatEditing != null)
-                OnChatEditing(ToInt32(update[1]));
+            if (OnChatEditing == null) return;
+
+            OnChatEditing(ToInt32(update[2]),
+                          ToInt32(update[1]));
         }
 
         private void UserTypingInChat(object[] update)
         {
-            if (OnStartTypingInChat != null)
-                OnStartTypingInChat(ToInt32(update[1]),
-                                    ToInt32(update[2]));
+            if (OnStartTypingInChat == null) return;
+
+            OnStartTypingInChat(ToInt32(update[1]),
+                                ToInt32(update[2]));
         }
 
         private void UserTyping(object[] update)
         {
-            if (OnStartTyping != null)
-                OnStartTyping(ToInt32(update[1]));
+            if (OnStartTyping == null) return;
+
+            OnStartTyping(ToInt32(update[1]));
         }
 
         private void MessageReceive(object[] update)
         {
-            if (OnNewMessage != null)
-            {
-                if ((ToInt32(update[2]) & 2) == 2) return;
+            if (OnNewMessageFromUser == null && OnNewMessageFromChat == null) return;
+            if ((ToInt32(update[2]) & 2) == 2) return;
 
-                var extraFields = lpMode > 0 ? ObjToDictinary(update[6]) : null;
-                OnNewMessage(ToInt32(update[3]),
-                             Convert.ToString(update[5]),
-                             extraFields);
+            var extraFields = objToDictinary(update[6]);
+            int peerID = ToInt32(update[3]);
+            if (peerID > 2000000000)
+            {
+                if (extraFields.ContainsKey("source_act")) return;
+                OnNewMessageFromChat(peerID,
+                                     ToInt32(extraFields["from"]),
+                                     Convert.ToString(update[5]),
+                                     extraFields);
             }
-            
+            else
+            {
+                OnNewMessageFromUser(peerID,
+                                     Convert.ToString(update[5]),
+                                     extraFields);
+            }
         }
 
         private void FriendOffline(object[] update)
         {
-            if (OnNewOffline != null)
-                OnNewOffline(ToInt32(update[1]));
+            if (OnNewOffline == null) return;
+
+            OnNewOffline((ToInt32(update[1])) * -1);
         }
 
         private void FriendOnline(object[] update)
         {
-            if (OnNewOnline != null)
-                OnNewOnline(ToInt32(update[1]));
+            if (OnNewOnline == null) return;
+
+            OnNewOnline((ToInt32(update[1])) * -1);
         }
 
         private void MessageEdit(object[] update)
         {
-            if (OnMessageEdit != null)
-                OnMessageEdit(ToInt32(update[1]),
-                                      ToInt32(update[3]),
-                                      Convert.ToString(update[5]));
+            if (OnMessageEdit == null) return;
+
+            OnMessageEdit(ToInt32(update[1]),
+                                  ToInt32(update[3]),
+                                  Convert.ToString(update[5]));
         }
 
         private void MessageRead(object[] update)
         {
-            if (OnMessageRead != null)
-                OnMessageRead(ToInt32(update[1]),
-                                      ToInt32(update[2]));
+            if (OnMessageRead == null) return;
+
+            OnMessageRead(ToInt32(update[1]),
+                                  ToInt32(update[2]));
         }
 
         private void MessageDelete(object[] update)
         {
-            if (OnMessageDelete != null)
-                OnMessageDelete(ToInt32(update[1]),
-                                        ToInt32(update[3]));
+            if (OnMessageDelete == null) return;
+
+            OnMessageDelete(ToInt32(update[1]),
+                            ToInt32(update[3]));
+        }
+
+        private void UnreadCountChange(object[] update)
+        {
+            if (OnUnreadMessageChange == null) return;
+
+            OnUnreadMessageChange(ToInt32(update[1]));
         }
 
         #endregion
@@ -183,20 +218,22 @@ namespace VkApiSDK.LongPoll
 
             ts = lpData.Ts;
             cts = new CancellationTokenSource();
+            IsRun = true;
 
             Task.Run(()=> {
                 while(!cts.IsCancellationRequested)
                 {
-                    var updates = SingleRequest(ts).Result;
+                    var updates = singleRequest(ts).Result;
 
-                    handleFailsIfNeed(updates);
+                    var errCode = handleFailsIfNeed(updates);
+                    if (errCode > 0) continue;
 
                     ts = updates.Ts;
                     analysLongPollResponse(updates.Updates);
                 }
             }, cts.Token);
 
-            return true;
+            return IsRun;
         }
 
         /// <summary>
@@ -220,8 +257,9 @@ namespace VkApiSDK.LongPoll
                 new GetLongPollServer(
                     AccessToken: AccessToken
                 ));
-
             lpData = result?.Response;
+
+            if (lpData == null) return false;
 
             longPollRequest = new SendLongPollRequest(
                 Server: lpData.Server,
@@ -230,7 +268,7 @@ namespace VkApiSDK.LongPoll
                 Mode: lpMode
             );
 
-            return lpData != null;
+            return true;
         }
 
         /// <summary>
@@ -238,7 +276,7 @@ namespace VkApiSDK.LongPoll
         /// </summary>
         /// <param name="ts"></param>
         /// <returns>Объект изменений</returns>
-        private async Task<LongPollResponse> SingleRequest(int ts)
+        private async Task<LongPollResponse> singleRequest(int ts)
         {
             longPollRequest.Ts = ts;
             var result = await _request.Dispath<LongPollResponse>(longPollRequest);
@@ -258,14 +296,15 @@ namespace VkApiSDK.LongPoll
                 switch (code)
                 {
                     case 2: MessageDelete(update); break;
-                    case 7: MessageRead(update); break;
+                    case 4: MessageReceive(update); break;
                     case 5: MessageEdit(update); break;
+                    case 7: MessageRead(update); break;
                     case 8: FriendOnline(update); break;
                     case 9: FriendOffline(update); break;
-                    case 4: MessageReceive(update); break;
+                    case 52: ChatEdit(update); break;
                     case 61: UserTyping(update); break;
                     case 62: UserTypingInChat(update); break;
-                    case 51: ChatEdit(update); break;
+                    case 80: UnreadCountChange(update); break;
                 }
             }
         }
@@ -282,17 +321,19 @@ namespace VkApiSDK.LongPoll
         /// <para>3 — информация о пользователе утрачена, нужно запросить новые key и ts методом messages.getLongPollServer.</para>
         /// <para>4 — передан недопустимый номер версии в параметре version.</para>
         /// </returns>
-        private void handleFailsIfNeed(LongPollResponse lpFails)
+        private int handleFailsIfNeed(LongPollResponse lpFails)
         {
-            
+            if (lpFails.ErrorCode == 0) return 0;
+
+            var isOk = CreateConnection().Result;
+
+            return lpFails.ErrorCode;
         }
 
-        private Dictionary<string, string> ObjToDictinary(object obj)
+        private Dictionary<string, string> objToDictinary(object obj)
         {
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(JsonConvert.SerializeObject(obj));
         }
-
-        //todo: handle longpoll fails
 
         //todo: fix obj to dictinary method
     }

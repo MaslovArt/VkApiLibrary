@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using VkApiSDK.Abstraction;
 
 namespace VkApiSDK.Requests
 {

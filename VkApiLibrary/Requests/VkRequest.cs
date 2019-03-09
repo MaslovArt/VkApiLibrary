@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using VkApiSDK.Errors;
+using VkApiSDK.Abstraction;
+using VkApiSDK.Models.Errors;
 
 namespace VkApiSDK.Requests
 {
-    class VkRequest
+    public class VkRequest : IVkRequest
     {
         HttpClient client;
 
