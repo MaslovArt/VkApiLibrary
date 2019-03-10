@@ -4,6 +4,14 @@ namespace VkApiSDK.Models.Attachments
 {
     public class Document : BaseAttachment
     {
+        public Document()
+        {
+            Type = AttachmentType.Doc;
+        }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
@@ -11,11 +19,6 @@ namespace VkApiSDK.Models.Attachments
         public int Size { get; set; }
 
         [JsonProperty("type")]
-        public string Type { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format("{0}{1}_{2}", AttachmentType.Doc, OwnerID, ID);
-        }
+        public string DocType { get; set; }
     }
 }

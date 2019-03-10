@@ -6,28 +6,36 @@ namespace VkApiSDK.Models.Attachments
 {
     public class BaseAttachment
     {
-        private VkDateTime data;
+        protected VkDateTime date;
+
+        public string Type { get; protected set; }
 
         [JsonProperty("id")]
-        public string ID { get; set; }
+        public int ID { get; set; }
 
         [JsonProperty("owner_id")]
-        public string OwnerID { get; set; }
-
-        [JsonProperty("url")]
-        public string Url { get; set; }
+        public int OwnerID { get; set; }
 
         [JsonProperty("date")]
         public string Date
         {
-            get { return data.DayTimeOrDayMonthTime; }
+            get { return date.DayTimeOrDayMonthTime; }
             set
             {
-                data = new VkDateTime(Convert.ToInt64(value));
+                date = new VkDateTime(Convert.ToInt64(value));
             }
         }
 
         [JsonProperty("access_key")]
         public string AccessKey { get; set; }
+
+        public override string ToString()
+        {
+            var toSendString = string.Format("{0}{1}_{2}", Type, OwnerID, ID);
+            if (!string.IsNullOrEmpty(AccessKey))
+                toSendString += "_" + AccessKey;
+
+            return toSendString;
+        }
     }
 }

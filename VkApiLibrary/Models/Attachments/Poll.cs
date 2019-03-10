@@ -4,23 +4,15 @@ using VkApiSDK.Utils;
 
 namespace VkApiSDK.Models.Attachments
 {
-    public class Poll
+    public class Poll : BaseAttachment
     {
-        private VkDateTime data;
-
-        [JsonProperty("id")]
-        public int ID { get; set; }
-
-        [JsonProperty("owner_id")]
-        public int OwnerID { get; set; }
-
         [JsonProperty("created")]
-        public string CreateDate
+        public new string Date
         {
-            get { return data.DayTimeOrDayMonthTime; }
+            get { return date.DayTimeOrDayMonthTime; }
             set
             {
-                data = new VkDateTime(Convert.ToInt64(value));
+                date = new VkDateTime(Convert.ToInt64(value));
             }
         }
 

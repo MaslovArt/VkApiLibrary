@@ -4,6 +4,14 @@ namespace VkApiSDK.Models.Attachments
 {
     public class Audio : BaseAttachment
     {
+        public Audio()
+        {
+            Type = AttachmentType.Audio;
+        }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
+
         [JsonProperty("artist")]
         public string Artist { get; set; }
 

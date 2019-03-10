@@ -8,16 +8,16 @@ namespace VkApiSDK.Models.Attachments
         public bool MarkedAsAds { get; set; }
 
         [JsonProperty("from_id")]
-        public string FromID { get; set; }
+        public int FromID { get; set; }
 
         [JsonProperty("to_id")]
-        public string ToID { get; set; }
+        public int ToID { get; set; }
 
         [JsonProperty("post_type")]
         public string PostType { get; set; }
 
         [JsonProperty("photo")]
-        public Picture[] Photos { get; set; }
+        public Photo[] Photos { get; set; }
 
         public override string ToString()
         {

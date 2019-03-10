@@ -49,14 +49,21 @@ namespace VkApiSDK.Messages
         /// <param name="peer">Идентификатор назначения</param>
         /// <param name="message">Текст</param>
         /// <returns></returns>
-        public async Task<int> SendMessage(Peer peer, string message)
+        public async Task<int> SendMessage(Peer peer, string message, IEnumerable<VkMessage> FwdMessages = null, 
+            IEnumerable<BaseAttachment> Attachments = null, VkMessage ReplyTo = null)
         {
+            var attachment = "";
+            if (Attachments != null)
+                attachment = string.Join(",", Attachments.Select(a => a.ToString()));
+
             var result = await _vkRequest.Dispath<VkResponse<int>>(
                 new SendMessage(
                     AccessToken: AuthData.AccessToken,
                     PeerID: ConvertIDIfChat(peer),
                     Message: message,
-                    Attachments: ""
+                    ForwardMessageIDs: FwdMessages?.Select(fwd => fwd.ID),
+                    ReplyTo: ReplyTo?.ID,
+                    Attachments: attachment
                 ));
 
             return result != null ? result.Response : -1;

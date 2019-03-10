@@ -51,6 +51,7 @@
     <Compile Include="Models\Account\BannedData.cs" />
     <Compile Include="Models\Account\CountersData.cs" />
     <Compile Include="Models\Attachments\Poll.cs" />
+    <Compile Include="Models\Attachments\Video.cs" />
     <Compile Include="Models\Attachments\VoteAnswer.cs" />
     <Compile Include="Models\Errors\Error.cs" />
     <Compile Include="Models\Errors\ErrorResponse.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Models\Attachments\Document.cs" />
     <Compile Include="Models\Attachments\Image.cs" />
     <Compile Include="Models\Attachments\Link.cs" />
-    <Compile Include="Models\Attachments\Picture.cs" />
+    <Compile Include="Models\Attachments\Photo.cs" />
     <Compile Include="Models\Attachments\Sticker.cs" />
     <Compile Include="Models\Attachments\Wall.cs" />
     <Compile Include="Models\Chat.cs" />

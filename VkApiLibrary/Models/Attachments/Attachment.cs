@@ -23,7 +23,7 @@ namespace VkApiSDK.Models.Attachments
         public Wall Wall { get; set; }
 
         [JsonProperty("photo")]
-        public Picture Picture { get; set; }
+        public Photo Picture { get; set; }
 
         [JsonProperty("poll")]
         public Poll Poll { get; set; }

@@ -17,6 +17,6 @@ namespace VkApiSDK.Models.Attachments
         public string Description { get; set; }
 
         [JsonProperty("photo")]
-        public Picture Photos { get; set; }
+        public Photo Photos { get; set; }
     }
 }
