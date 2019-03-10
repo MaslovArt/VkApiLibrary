@@ -24,5 +24,8 @@ namespace VkApiSDK.Models.Attachments
 
         [JsonProperty("photo")]
         public Picture Picture { get; set; }
+
+        [JsonProperty("poll")]
+        public Poll Poll { get; set; }
     }
 }

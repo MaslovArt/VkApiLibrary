@@ -86,16 +86,8 @@
         /// <param name="scopes">Массив разрещений</param>
         /// <returns>Строка</returns>
         public static string GetScopeString(params string[] scopes)
-        {
-            string result = "";
-            if (scopes.Length > 0)
-            {
-                foreach (string scope in scopes)
-                    result += "," + scope;
-                result = result.Remove(0, 1);
-            }
-
-            return result;
+        {          
+            return string.Join(",", scopes);
         }
     }
 }

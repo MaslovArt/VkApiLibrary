@@ -3,8 +3,8 @@ using VkApiSDK.Abstraction;
 using VkApiSDK.Models;
 using VkApiSDK.Requests;
 using VkApiSDK.Account.Methods;
-using VkApiSDK.Models.Friends;
 using VkApiSDK.Models.Account;
+using System.Collections.Generic;
 
 namespace VkApiSDK.Account
 {
@@ -67,6 +67,22 @@ namespace VkApiSDK.Account
                     AccessToken: AuthData.AccessToken,
                     Offset: Offset,
                     Count: Count
+                ));
+
+            return result?.Response;
+        }
+
+        /// <summary>
+        /// Возвращает ненулевые значения счетчиков пользователя.
+        /// </summary>
+        /// <param name="Filters">Фильтр ответа</param>
+        /// <returns></returns>
+        public async Task<CountersData> GetCounters(IEnumerable<string> Filters)
+        {
+            var result = await _vkRequest.Dispath<VkResponse<CountersData>>(
+                new GetCounters(
+                    AccessToken: AuthData.AccessToken,
+                    Filters: Filters
                 ));
 
             return result?.Response;

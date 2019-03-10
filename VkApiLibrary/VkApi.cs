@@ -5,6 +5,7 @@ using VkApiSDK.Users;
 using VkApiSDK.Messages;
 using VkApiSDK.LongPoll;
 using VkApiSDK.Account;
+using VkApiSDK.Polls;
 using System;
 using System.Threading.Tasks;
 using VkApiSDK.Model.Messages;
@@ -115,6 +116,11 @@ namespace VkApiSDK
         public AccountMethods Account { get; private set; }
 
         /// <summary>
+        /// Методы для работы с голосованием
+        /// </summary>
+        public PollMethdos Polls { get; private set; }
+
+        /// <summary>
         /// Методы для работы с новыми событиями
         /// </summary>
         public LongPollManager LongPollService { get; private set; }
@@ -187,6 +193,7 @@ namespace VkApiSDK
             Messages = new MessageMethods(AuthData, vkRequest);
             Chats = new ChatMethods(AuthData, vkRequest);
             Account = new AccountMethods(AuthData, vkRequest);
+            Polls = new PollMethdos(AuthData, vkRequest);
         }
 
         #endregion

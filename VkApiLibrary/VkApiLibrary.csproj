@@ -8,7 +8,7 @@
     <ProjectGuid>{A6142BE4-A2EA-4439-AAA2-43340168F631}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VkApiLibrary</RootNamespace>
+    <RootNamespace>VkApiSDK</RootNamespace>
     <AssemblyName>VkApiLibrary</AssemblyName>
     <DefaultLanguage>ru-RU</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -34,45 +34,101 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Abstraction\IVkRequest.cs" />
+    <Compile Include="Abstraction\VkApiMethodGroup.cs" />
+    <Compile Include="Account\AccountFilter.cs" />
+    <Compile Include="Account\AccountMethods.cs" />
+    <Compile Include="Account\Methods\Ban.cs" />
+    <Compile Include="Account\Methods\GetBanned.cs" />
+    <Compile Include="Account\Methods\GetCounters.cs" />
+    <Compile Include="Account\Methods\UnBan.cs" />
     <Compile Include="Auth\AuthData.cs" />
     <Compile Include="Auth\VkAutharization.cs" />
-    <Compile Include="Errors\Error.cs" />
-    <Compile Include="Errors\ErrorResponse.cs" />
-    <Compile Include="Friends\ApiFriends.cs" />
+    <Compile Include="Friends\Methods\AddFriend.cs" />
+    <Compile Include="Friends\Methods\DeleteFriend.cs" />
+    <Compile Include="Friends\Methods\GetRequests.cs" />
+    <Compile Include="Messages\ActivityType.cs" />
+    <Compile Include="Models\Account\BannedData.cs" />
+    <Compile Include="Models\Account\CountersData.cs" />
+    <Compile Include="Models\Attachments\Poll.cs" />
+    <Compile Include="Models\Attachments\VoteAnswer.cs" />
+    <Compile Include="Models\Errors\Error.cs" />
+    <Compile Include="Models\Errors\ErrorResponse.cs" />
+    <Compile Include="Friends\FriendMethods.cs" />
     <Compile Include="Friends\FriendOrder.cs" />
-    <Compile Include="Friends\FriendsData.cs" />
-    <Compile Include="Friends\GetFriends.cs" />
-    <Compile Include="Friends\GetOnlineFriends.cs" />
-    <Compile Include="Friends\OnlineFriendsData.cs" />
-    <Compile Include="Interfaces\IDataProvider.cs" />
-    <Compile Include="Interfaces\IVkApiMethod.cs" />
-    <Compile Include="Interfaces\IVkResponse.cs" />
-    <Compile Include="Messages\ApiMessages.cs" />
-    <Compile Include="Messages\Attachments\Attachment.cs" />
-    <Compile Include="Messages\Dialogs\ChatSettings.cs" />
-    <Compile Include="Messages\Dialogs\Conversation.cs" />
-    <Compile Include="Messages\Dialogs\Dialog.cs" />
-    <Compile Include="Messages\Dialogs\DialogFilter.cs" />
-    <Compile Include="Messages\Dialogs\DialogRenderData.cs" />
-    <Compile Include="Messages\Dialogs\DialogsData.cs" />
-    <Compile Include="Messages\Dialogs\GetConversations.cs" />
-    <Compile Include="Messages\Dialogs\Peer.cs" />
-    <Compile Include="Messages\Dialogs\Photos.cs" />
-    <Compile Include="Messages\History\GetDialogHistory.cs" />
-    <Compile Include="Messages\Message.cs" />
+    <Compile Include="Models\Friends\DeleteFriendData.cs" />
+    <Compile Include="Models\Friends\FriendsData.cs" />
+    <Compile Include="Friends\Methods\GetFriends.cs" />
+    <Compile Include="Friends\Methods\GetOnlineFriends.cs" />
+    <Compile Include="Models\Friends\OnlineFriendsData.cs" />
+    <Compile Include="Abstraction\IDataProvider.cs" />
+    <Compile Include="Abstraction\IVkApiMethod.cs" />
+    <Compile Include="Abstraction\IVkResponse.cs" />
+    <Compile Include="LongPoll\Methods\GetLongPollServer.cs" />
+    <Compile Include="Models\LongPoll\LongPollConnectionData.cs" />
+    <Compile Include="LongPoll\LongPollManager.cs" />
+    <Compile Include="Models\LongPoll\LongPollResponse.cs" />
+    <Compile Include="LongPoll\Methods\SendLongPollRequest.cs" />
+    <Compile Include="Models\Attachments\Attachment.cs" />
+    <Compile Include="Models\Attachments\AttachmentData.cs" />
+    <Compile Include="Models\Attachments\AttachmentWithMsgID.cs" />
+    <Compile Include="Models\Attachments\AttachmentType.cs" />
+    <Compile Include="Models\Attachments\Audio.cs" />
+    <Compile Include="Models\Attachments\BaseAttachment.cs" />
+    <Compile Include="Models\Attachments\Document.cs" />
+    <Compile Include="Models\Attachments\Image.cs" />
+    <Compile Include="Models\Attachments\Link.cs" />
+    <Compile Include="Models\Attachments\Picture.cs" />
+    <Compile Include="Models\Attachments\Sticker.cs" />
+    <Compile Include="Models\Attachments\Wall.cs" />
+    <Compile Include="Models\Chat.cs" />
+    <Compile Include="Messages\ChatMethods.cs" />
+    <Compile Include="Messages\Methods\AddChatUser.cs" />
+    <Compile Include="Messages\Methods\CreateChat.cs" />
+    <Compile Include="Messages\Methods\DeleteConversation.cs" />
+    <Compile Include="Messages\Methods\DeleteMessage.cs" />
+    <Compile Include="Messages\Methods\EditChat.cs" />
+    <Compile Include="Messages\Methods\EditMessage.cs" />
+    <Compile Include="Messages\Methods\GetChat.cs" />
+    <Compile Include="Messages\Methods\GetHistoryAttachments.cs" />
+    <Compile Include="Messages\DialogFilter.cs" />
+    <Compile Include="Models\Messages\DialogRenderData.cs" />
+    <Compile Include="Models\Messages\DialogHistoryData.cs" />
+    <Compile Include="Models\Messages\DialogsData.cs" />
+    <Compile Include="Messages\Methods\GetConversations.cs" />
+    <Compile Include="Messages\Methods\MarkAsRead.cs" />
+    <Compile Include="Messages\Methods\PinMessage.cs" />
+    <Compile Include="Messages\Methods\RemoveChatUser.cs" />
+    <Compile Include="Messages\Methods\SendMessage.cs" />
+    <Compile Include="Messages\Methods\SetActivity.cs" />
+    <Compile Include="Messages\Methods\GetDialogHistory.cs" />
+    <Compile Include="Messages\Methods\UnpinMessage.cs" />
+    <Compile Include="Messages\MessageMethods.cs" />
+    <Compile Include="Models\Polls\VotersData.cs" />
+    <Compile Include="Polls\Methods\AddVote.cs" />
+    <Compile Include="Polls\Methods\BaseVote.cs" />
+    <Compile Include="Polls\Methods\CreateVote.cs" />
+    <Compile Include="Polls\Methods\DeleteVote.cs" />
+    <Compile Include="Polls\Methods\GetVoters.cs" />
+    <Compile Include="Polls\PollMethdos.cs" />
+    <Compile Include="Requests\ArrayResponse.cs" />
+    <Compile Include="Users\UserMethods.cs" />
+    <Compile Include="Models\VkMessage.cs" />
+    <Compile Include="Models\Dialog.cs" />
+    <Compile Include="Abstraction\Peer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Requests\ApiField.cs" />
+    <Compile Include="Requests\ExtraField.cs" />
     <Compile Include="Requests\Attributes\RequestParameter.cs" />
-    <Compile Include="Requests\VkApiMethod.cs" />
+    <Compile Include="Abstraction\VkApiMethod.cs" />
     <Compile Include="Requests\VkPermissions.cs" />
     <Compile Include="Requests\VkRequest.cs" />
     <Compile Include="Requests\VkResponse.cs" />
-    <Compile Include="Users\ApiUsers.cs" />
-    <Compile Include="Users\GetUsers.cs" />
-    <Compile Include="Users\LastOnline.cs" />
-    <Compile Include="Users\User.cs" />
+    <Compile Include="Users\Methods\GetUsers.cs" />
+    <Compile Include="Models\Users\LastOnline.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Utils\JsonPathConverter.cs" />
     <Compile Include="Utils\VkDateTime.cs" />
-    <Compile Include="VkClient.cs" />
+    <Compile Include="VkApi.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -83,6 +139,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
