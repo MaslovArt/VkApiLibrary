@@ -194,6 +194,7 @@ namespace VkApiSDK
             Chats = new ChatMethods(AuthData, vkRequest);
             Account = new AccountMethods(AuthData, vkRequest);
             Polls = new PollMethdos(AuthData, vkRequest);
+            LongPollService = new LongPollManager(AuthData, vkRequest);
         }
 
         #endregion

@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using VkApiSDK.Models.Response;
-using VkApiSDK.Requests;
 using Newtonsoft.Json;
 using static System.Convert;
 using VkApiSDK.Models.LongPoll;
 using VkApiSDK.LongPoll.Methods;
+using VkApiSDK.Abstraction;
 
 namespace VkApiSDK.LongPoll
 {
     /// <summary>
     /// Позволяет получать данные о новых событиях с помощью «длинных запросов».
     /// </summary>
-    public class LongPollManager
+    public class LongPollManager : VkApiMethodGroup
     {
-        private VkRequest _request = new VkRequest();
         private LongPollConnectionData lpData;
         private int lpMode;
         private int ts;
@@ -27,10 +26,10 @@ namespace VkApiSDK.LongPoll
         /// Инициализирует новый экземпляр класса <c>LongPollManager</c>
         /// </summary>
         /// <param name="aData">Данные для доступа к апи</param>
-        public LongPollManager(AuthData aData)
+        public LongPollManager(AuthData AuthData, IVkRequest VkRequest = null)
+            :base(AuthData, VkRequest)
         {
             lpMode = 2;
-            AccessToken = aData.AccessToken;
         }
 
         #region Events
@@ -106,8 +105,6 @@ namespace VkApiSDK.LongPoll
         #region Properties
 
         public bool IsRun { get; private set; }
-
-        public string AccessToken { get; private set; }
 
         #endregion
 
@@ -254,9 +251,9 @@ namespace VkApiSDK.LongPoll
         /// <returns>True - если соединение установлено, иначе false</returns>
         public async Task<bool> CreateConnection()
         {
-            var result = await _request.Dispath<VkResponse<LongPollConnectionData>>(
+            var result = await _vkRequest.Dispath<VkResponse<LongPollConnectionData>>(
                 new GetLongPollServer(
-                    AccessToken: AccessToken
+                    AccessToken: AuthData.AccessToken
                 ));
             lpData = result?.Response;
 
@@ -280,7 +277,7 @@ namespace VkApiSDK.LongPoll
         private async Task<LongPollResponse> singleRequest(int ts)
         {
             longPollRequest.Ts = ts;
-            var result = await _request.Dispath<LongPollResponse>(longPollRequest);
+            var result = await _vkRequest.Dispath<LongPollResponse>(longPollRequest);
 
             return result;
         }
