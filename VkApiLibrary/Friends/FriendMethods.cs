@@ -3,6 +3,7 @@ using VkApiSDK.Abstraction;
 using VkApiSDK.Friends.Methods;
 using VkApiSDK.Models;
 using VkApiSDK.Models.Friends;
+using VkApiSDK.Models.Response;
 using VkApiSDK.Requests;
 
 namespace VkApiSDK.Friends
@@ -29,7 +30,7 @@ namespace VkApiSDK.Friends
         /// <returns>Друзей пользователя</returns>
         public async Task<User[]> GetFriendsAsync(int count = 5000, int offset = 0)
         {
-            var result = await _vkRequest.Dispath<VkResponse<FriendsData>>(
+            var result = await _vkRequest.Dispath<VkResponse<ArrayResponse<User>>>(
                 new GetFriends(
                     AccessToken: AuthData.AccessToken,
                     UserID: AuthData.UserID,
@@ -42,7 +43,7 @@ namespace VkApiSDK.Friends
                     Offset: offset
                ));
 
-            return result?.Response.Friends;
+            return result?.Response.Items;
         }
 
         /// <summary>
@@ -106,9 +107,9 @@ namespace VkApiSDK.Friends
         /// <param name="Offset">Cмещение, необходимое для выборки определенного подмножества заявок на добавление в друзья.</param>
         /// <param name="Count">Максимальное количество заявок на добавление в друзья, которые необходимо получить</param>
         /// <returns></returns>
-        public async Task<FriendsData> GetRequests(bool Out = false, bool NeedViewed = false, int Offset = 0, int Count = 100)
+        public async Task<User[]> GetRequests(bool Out = false, bool NeedViewed = false, int Offset = 0, int Count = 100)
         {
-            var result = await _vkRequest.Dispath<VkResponse<FriendsData>>(
+            var result = await _vkRequest.Dispath<VkResponse<ArrayResponse<User>>>(
                 new GetRequests(
                     AccessToken: AuthData.AccessToken,
                     Out: Out,
@@ -117,7 +118,7 @@ namespace VkApiSDK.Friends
                     Offset: Offset
                 ));
 
-            return result?.Response;
+            return result?.Response.Items;
         }
     }
 }

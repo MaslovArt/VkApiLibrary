@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
-using VkApiSDK.Models;
+using VkApiSDK.Models.Response;
 
-namespace VkApiSDK.Model.Messages
+namespace VkApiSDK.Models.Messages
 {
-    public class DialogsData
+    public class DialogsData : ArrayResponse<Dialog>
     {
-        [JsonProperty("count")]
-        public int Count { get; set; }
-
-        [JsonProperty("items")]
-        public Dialog[] Dialogs { get; set; }
-
         [JsonProperty("unread_count")]
         public int UnreadCount { get; set; }
     }

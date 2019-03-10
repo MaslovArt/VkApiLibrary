@@ -1,4 +1,4 @@
-﻿namespace VkApiSDK.Model.Messages
+﻿namespace VkApiSDK.Models.Messages
 {
     public class DialogRenderData
     {

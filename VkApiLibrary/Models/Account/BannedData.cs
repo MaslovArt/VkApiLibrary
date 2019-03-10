@@ -1,15 +1,10 @@
 ﻿using Newtonsoft.Json;
+using VkApiSDK.Models.Response;
 
 namespace VkApiSDK.Models.Account
 {
-    public class BannedData
+    public class BannedData : ArrayResponse<int>
     {
-        [JsonProperty("count")]
-        public int Count { get; set; }
-
-        [JsonProperty("items")]
-        public int[] Items { get; set; }
-
         [JsonProperty("profiles")]
         public User[] Profiles { get; set; }
     }

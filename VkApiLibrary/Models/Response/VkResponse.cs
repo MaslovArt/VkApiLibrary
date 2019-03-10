@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using VkApiSDK.Abstraction;
 
-namespace VkApiSDK.Requests
+namespace VkApiSDK.Models.Response
 {
     public class VkResponse<T> : IVkResponse
     {

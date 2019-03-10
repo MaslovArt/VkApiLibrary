@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using VkApiSDK.Abstraction;
 using VkApiSDK.Messages.Methods;
 using VkApiSDK.Models;
-using VkApiSDK.Requests;
+using VkApiSDK.Models.Response;
 
 namespace VkApiSDK.Messages
 {

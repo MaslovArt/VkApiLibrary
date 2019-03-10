@@ -4,9 +4,8 @@ using System.Linq;
 using VkApiSDK.Abstraction;
 using VkApiSDK.Models.Attachments;
 using VkApiSDK.Polls.Methods;
-using VkApiSDK.Requests;
+using VkApiSDK.Models.Response;
 using VkApiSDK.Models.Polls;
-using VkApiSDK.Models;
 
 namespace VkApiSDK.Polls
 {
@@ -16,7 +15,7 @@ namespace VkApiSDK.Polls
     public class PollMethdos : VkApiMethodGroup
     {
         /// <summary>
-        /// Инициализирует новый экземпляр класса <c>AccountMethods</c>
+        /// Инициализирует новый экземпляр класса <c>PollMethdos</c>
         /// </summary>
         /// <param name="AuthData">Токен доступа</param>
         /// <param name="VkRequest">Класс для отправки запросов</param>

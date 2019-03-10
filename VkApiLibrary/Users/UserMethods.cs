@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using VkApiSDK.Abstraction;
 using VkApiSDK.Models;
-using VkApiSDK.Requests;
+using VkApiSDK.Models.Response;
 using VkApiSDK.Users.Methods;
 
 namespace VkApiSDK.Users

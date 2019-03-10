@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 
-namespace VkApiSDK.Models.Friends
+namespace VkApiSDK.Models.Response
 {
-    public class FriendsData
+    public class ArrayResponse<T>
     {
         [JsonProperty("count")]
         public int Count { get; set; }
 
         [JsonProperty("items")]
-        public User[] Friends { get; set; }
+        public T[] Items { get; set; }
     }
 }

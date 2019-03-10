@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
+using VkApiSDK.Models.Response;
 using VkApiSDK.Requests;
 using Newtonsoft.Json;
 using static System.Convert;

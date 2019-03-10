@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using VkApiSDK.Abstraction;
 using VkApiSDK.Messages.Methods;
-using VkApiSDK.Model.Messages;
+using VkApiSDK.Models.Messages;
 using VkApiSDK.Models;
 using VkApiSDK.Models.Attachments;
-using VkApiSDK.Requests;
+using VkApiSDK.Models.Response;
 
 namespace VkApiSDK.Messages
 {
@@ -180,9 +180,9 @@ namespace VkApiSDK.Messages
         /// <param name="startMessageID">Начиная с какого получать</param>
         /// <param name="fields">Дополнительные поля</param>
         /// <returns></returns>
-        public async Task<DialogHistoryData> GetDialogHistory(Peer peer, int count = 20, int offset = 0, int startMessageID = -1, IEnumerable<string> fields = null)
+        public async Task<VkMessage[]> GetDialogHistory(Peer peer, int count = 20, int offset = 0, int startMessageID = -1, IEnumerable<string> fields = null)
         {
-            var result = await _vkRequest.Dispath<VkResponse<DialogHistoryData>>(
+            var result = await _vkRequest.Dispath<VkResponse<ArrayResponse<VkMessage>>>(
                 new GetDialogHistory(
                     AccessToken: AuthData.AccessToken,
                     PeerID: ConvertIDIfChat(peer),
@@ -192,7 +192,7 @@ namespace VkApiSDK.Messages
                     Fields: fields
                 ));
 
-            return result?.Response;
+            return result?.Response.Items;
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace VkApiSDK.Messages
             if (result == null)
                 return false;
 
-            var deleteCallNumber = Math.Ceiling(result.Count / 10000d);
+            var deleteCallNumber = Math.Ceiling(result.Length / 10000d);
             //var deleteResponse = 0;
 
             for (int i = 0; i < deleteCallNumber; i++)

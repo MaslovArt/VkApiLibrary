@@ -8,7 +8,7 @@ using VkApiSDK.Account;
 using VkApiSDK.Polls;
 using System;
 using System.Threading.Tasks;
-using VkApiSDK.Model.Messages;
+using VkApiSDK.Models.Messages;
 using VkApiSDK.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -151,28 +151,28 @@ namespace VkApiSDK
 
         private DialogRenderData[] GetDialogsRenderData(DialogsData dialogs, User[] users)
         {
-            var result = new DialogRenderData[dialogs.Dialogs.Count()];
+            var result = new DialogRenderData[dialogs.Items.Count()];
             for (int i = 0; i < result.Length; i++)
             {
                 string peerName = "";
 
-                if (dialogs.Dialogs[i].Type == "chat")
-                    peerName = dialogs.Dialogs[i].Title;
+                if (dialogs.Items[i].Type == "chat")
+                    peerName = dialogs.Items[i].Title;
 
-                else if (dialogs.Dialogs[i].Type == "user")
-                    peerName = users.Where(o => o.ID == dialogs.Dialogs[i].ID)
+                else if (dialogs.Items[i].Type == "user")
+                    peerName = users.Where(o => o.ID == dialogs.Items[i].ID)
                                     .Select(o => o.FullName)
                                     .FirstOrDefault();
 
                 result[i] = new DialogRenderData()
                 {
-                    Type = dialogs.Dialogs[i].Type,
-                    ID = dialogs.Dialogs[i].ID,
-                    UnreadMsgCount = dialogs.Dialogs[i].UnreadCount,
-                    LastMessage = dialogs.Dialogs[i].LastMessage.Text,
-                    DialogTime = dialogs.Dialogs[i].LastMessage.Date,
+                    Type = dialogs.Items[i].Type,
+                    ID = dialogs.Items[i].ID,
+                    UnreadMsgCount = dialogs.Items[i].UnreadCount,
+                    LastMessage = dialogs.Items[i].LastMessage.Text,
+                    DialogTime = dialogs.Items[i].LastMessage.Date,
                     PeerName = peerName,
-                    Out = dialogs.Dialogs[i].LastMessage.Out == 1
+                    Out = dialogs.Items[i].LastMessage.Out == 1
                 };
             }
 
@@ -181,8 +181,8 @@ namespace VkApiSDK
 
         private IEnumerable<int> getUserIDs(DialogsData dd)
         {
-            return dd.Dialogs.Where(d => d.Type.Equals("user"))
-                             .Select(d => d.ID);
+            return dd.Items.Where(d => d.Type.Equals("user"))
+                           .Select(d => d.ID);
         }
 
         private void initApiMethodGroups()

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using VkApiSDK.Abstraction;
 using VkApiSDK.Models;
-using VkApiSDK.Requests;
+using VkApiSDK.Models.Response;
 using VkApiSDK.Account.Methods;
 using VkApiSDK.Models.Account;
 using System.Collections.Generic;

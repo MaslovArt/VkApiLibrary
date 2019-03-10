@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using VkApiSDK.Requests;
+using VkApiSDK.Models.Response;
 
 namespace VkApiSDK.Models.Polls
 {
