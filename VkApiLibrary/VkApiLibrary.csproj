@@ -44,6 +44,13 @@
     <Compile Include="Account\Methods\UnBan.cs" />
     <Compile Include="Auth\AuthData.cs" />
     <Compile Include="Auth\VkAutharization.cs" />
+    <Compile Include="Groups\GroupMethods.cs" />
+    <Compile Include="Groups\Methods\DisableOnline.cs" />
+    <Compile Include="Groups\Methods\EnableOnline.cs" />
+    <Compile Include="Groups\Methods\GetGroupLongPollServer.cs" />
+    <Compile Include="Groups\Methods\GetLongPollSettings.cs" />
+    <Compile Include="Groups\Methods\SendGroupLongPollRequest.cs" />
+    <Compile Include="Groups\Methods\SetLongPollSettings.cs" />
     <Compile Include="Friends\Methods\AddFriend.cs" />
     <Compile Include="Friends\Methods\DeleteFriend.cs" />
     <Compile Include="Friends\Methods\GetRequests.cs" />

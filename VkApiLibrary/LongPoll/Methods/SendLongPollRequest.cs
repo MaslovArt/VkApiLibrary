@@ -1,14 +1,13 @@
 ﻿using VkApiSDK.Abstraction;
+using VkApiSDK.Groups.Methods;
 
 namespace VkApiSDK.LongPoll.Methods
 {
     /// <summary>
     /// LongPoll запрос
     /// </summary>
-    public class SendLongPollRequest : IVkApiMethod
+    public class SendLongPollRequest : SendGroupLongPollRequest
     {
-        private string _URL = "https://{0}?act=a_check&key={1}&ts={2}&wait={3}&mode={4}&version={5}";
-
         /// <summary>
         /// Инициализирует новый экземпляр класса <c>SendLongPollRequest</c>
         /// </summary>
@@ -18,42 +17,16 @@ namespace VkApiSDK.LongPoll.Methods
         /// <param name="Mode">Дополнительные опции ответа</param>
         /// <param name="WaitTime">Время ожидания</param>
         public SendLongPollRequest(string Server, string Key, int Ts, int Mode, int WaitTime = 25)
+            :base(Server, Key, Ts, WaitTime)
         {
-            this.Server = Server;
-            this.Key = Key;
             this.Version = "2";
-            this.WaitTime = WaitTime;
-            this.Ts = Ts;
             this.Mode = Mode;
         }
-
-        /// <summary>
-        /// Адрес сервера
-        /// </summary>
-        public string Server { get; private set; }
-
-        /// <summary>
-        /// Cекретный ключ сессии
-        /// </summary>
-        public string Key { get; private set; }
 
         /// <summary>
         /// Версия
         /// </summary>
         public string Version { get; private set; }
-
-        /// <summary>
-        /// Время ожидания
-        /// <para>
-        /// Так как некоторые прокси-серверы обрывают соединение после 30 секунд, рекомендуется указывать wait=25
-        /// </para>
-        /// </summary>
-        public int WaitTime { get; private set; }
-
-        /// <summary>
-        /// Номер последнего события, начиная с которого нужно получать данные
-        /// </summary>
-        public int Ts { get; set; }
 
         /// <summary>
         /// Дополнительные опции ответа
@@ -70,9 +43,9 @@ namespace VkApiSDK.LongPoll.Methods
         /// </summary>
         public int Mode { get; private set; }
 
-        public string GetRequestString()
+        public new string GetRequestString()
         {
-            return string.Format(_URL, Server, Key, Ts, WaitTime, Mode, Version);
+            return base.GetRequestString() + string.Format("&mode={4}&version={5}", Mode, Version);
         }
     }
 }
