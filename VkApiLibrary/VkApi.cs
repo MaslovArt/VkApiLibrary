@@ -12,6 +12,7 @@ using VkApiSDK.Models.Messages;
 using VkApiSDK.Models;
 using System.Collections.Generic;
 using System.Linq;
+using VkApiSDK.Models.Response;
 
 namespace VkApiSDK
 {
@@ -134,13 +135,26 @@ namespace VkApiSDK
         /// </summary>
         /// <param name="count">Кол-во диалогов</param>
         /// <returns>Диалоги</returns>
-        public async Task<DialogRenderData[]> GetDialogsRenderDataAsync(int count = 20, int offset = 0)
+        public async Task<VkResponse<DialogRenderData[]>> GetDialogsRenderDataAsync(int count = 20, int offset = 0)
         {
-            var dialogs = await Messages.GetDialogsAsync(count, offset);
-            var userIDs = getUserIDs(dialogs);
-            var users = await Users.GetUsersAsync(userIDs);
+            var result = new VkResponse<DialogRenderData[]>();
 
-            DialogRenderData[] result = GetDialogsRenderData(dialogs, users);
+            var dialogs = await Messages.GetDialogsAsync(count, offset);
+            if (!dialogs.IsSucceed)
+            {
+                result.Error = dialogs.Error;
+                return result;
+            }
+
+            var userIDs = getUserIDs(dialogs.Response);
+            var users = await Users.GetUsersAsync(userIDs);
+            if (!users.IsSucceed)
+            {
+                result.Error = users.Error;
+                return result;
+            }
+
+            result.Response = GetDialogsRenderData(dialogs.Response, users.Response);
 
             return result;
         }

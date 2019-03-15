@@ -6,6 +6,6 @@ namespace VkApiSDK.Abstraction
 {
     public interface IVkRequest
     {
-        Task<T> Dispath<T>(IVkApiMethod vkApiMethod, Action<Error> OnRequestError = null) where T : class;
+        Task<T> Dispath<T>(IVkApiMethod vkApiMethod) where T : IVkResponse;
     }
 }

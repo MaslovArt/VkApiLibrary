@@ -27,15 +27,13 @@ namespace VkApiSDK.Account
         /// </summary>
         /// <param name="User">Пользователь</param>
         /// <returns>Успех операции</returns>
-        public async Task<bool> Ban(User User)
+        public async Task<VkResponse<int>> Ban(User User)
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new Ban(
                     AccessToken: AuthData.AccessToken,
                     PeerID: User.ID
                 ));
-
-            return result == null ? false : result.Response == 1;
         }
 
         /// <summary>
@@ -43,15 +41,13 @@ namespace VkApiSDK.Account
         /// </summary>
         /// <param name="User">Пользователь</param>
         /// <returns></returns>
-        public async Task<bool> UnBan(User User)
+        public async Task<VkResponse<int>> UnBan(User User)
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new UnBan(
                     AccessToken: AuthData.AccessToken,
                     PeerID: User.ID
                 ));
-
-            return result == null ? false : result.Response == 1;
         }
 
         /// <summary>
@@ -60,16 +56,14 @@ namespace VkApiSDK.Account
         /// <param name="Offset">Cмещение, необходимое для выборки определенного подмножества черного списка.</param>
         /// <param name="Count">Kоличество объектов, информацию о которых необходимо вернуть.</param>
         /// <returns></returns>
-        public async Task<BannedData> GetBanned(int Offset = 0, int Count = 20)
+        public async Task<VkResponse<BannedData>> GetBanned(int Offset = 0, int Count = 20)
         {
-            var result = await _vkRequest.Dispath<VkResponse<BannedData>>(
+            return await _vkRequest.Dispath<VkResponse<BannedData>>(
                 new GetBanned(
                     AccessToken: AuthData.AccessToken,
                     Offset: Offset,
                     Count: Count
                 ));
-
-            return result?.Response;
         }
 
         /// <summary>
@@ -77,15 +71,13 @@ namespace VkApiSDK.Account
         /// </summary>
         /// <param name="Filters">Фильтр ответа</param>
         /// <returns></returns>
-        public async Task<CountersData> GetCounters(IEnumerable<string> Filters)
+        public async Task<VkResponse<CountersData>> GetCounters(IEnumerable<string> Filters)
         {
-            var result = await _vkRequest.Dispath<VkResponse<CountersData>>(
+            return await _vkRequest.Dispath<VkResponse<CountersData>>(
                 new GetCounters(
                     AccessToken: AuthData.AccessToken,
                     Filters: Filters
                 ));
-
-            return result?.Response;
         }
     }
 }

@@ -26,16 +26,14 @@ namespace VkApiSDK.Users
         /// </summary>
         /// <param name="userIDs">Набор id</param>
         /// <returns>Информацию о пользователя</returns>
-        public async Task<User[]> GetUsersAsync(IEnumerable<int> userIDs, IEnumerable<string> fields = null)
+        public async Task<VkResponse<User[]>> GetUsersAsync(IEnumerable<int> userIDs, IEnumerable<string> fields = null)
         {
-            var result = await _vkRequest.Dispath<VkResponse<User[]>>(
+            return await _vkRequest.Dispath<VkResponse<User[]>>(
                 new GetUsers(
                     AccessToken: AuthData.AccessToken,
                     UserIDs: userIDs,
                     Fields: fields
                 ));
-
-            return result?.Response;
         }
     }
 }

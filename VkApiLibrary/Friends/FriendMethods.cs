@@ -28,9 +28,9 @@ namespace VkApiSDK.Friends
         /// <param name="count">Кол-во друзей в запросе</param>
         /// <param name="offset">Смещение для получения данных</param>
         /// <returns>Друзей пользователя</returns>
-        public async Task<User[]> GetFriendsAsync(int count = 5000, int offset = 0)
+        public async Task<VkResponse<ArrayResponse<User>>> GetFriendsAsync(int count = 5000, int offset = 0)
         {
-            var result = await _vkRequest.Dispath<VkResponse<ArrayResponse<User>>>(
+            return await _vkRequest.Dispath<VkResponse<ArrayResponse<User>>>(
                 new GetFriends(
                     AccessToken: AuthData.AccessToken,
                     UserID: AuthData.UserID,
@@ -42,23 +42,19 @@ namespace VkApiSDK.Friends
                     Count: count,
                     Offset: offset
                ));
-
-            return result?.Response.Items;
         }
 
         /// <summary>
         /// Получает список id онлайн друзей
         /// </summary>
         /// <returns>Массив айди пользователей</returns>
-        public async Task<int[]> GetOnlineFriendIDsAsync()
+        public async Task<VkResponse<int[]>> GetOnlineFriendIDsAsync()
         {
-            var result = await _vkRequest.Dispath<VkResponse<int[]>>(
+            return await _vkRequest.Dispath<VkResponse<int[]>>(
                 new GetOnlineFriends(
                     AccessToken: AuthData.AccessToken,
                     UserID: AuthData.UserID
                 ));
-
-            return result?.Response;
         }
 
         /// <summary>
@@ -70,17 +66,15 @@ namespace VkApiSDK.Friends
         /// 2 — заявка на добавление в друзья от данного пользователя одобрена;
         /// 4 — повторная отправка заявки.
         /// </returns>
-        public async Task<int> AddFriend(User User, bool Follow, string Text = "")
+        public async Task<VkResponse<int>> AddFriend(User User, bool Follow, string Text = "")
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new AddFriend(
                     AccessToken: AuthData.AccessToken,
                     UserID: User.ID,
                     Text: Text,
                     Follow: Follow
                 ));
-
-            return result == null ? 0 : result.Response;
         }
 
         /// <summary>
@@ -88,15 +82,13 @@ namespace VkApiSDK.Friends
         /// </summary>
         /// <param name="User">Пользователь для удаления</param>
         /// <returns></returns>
-        public async Task<DeleteFriendData> DeleteFriend(User User)
+        public async Task<VkResponse<DeleteFriendData>> DeleteFriend(User User)
         {
-            var result = await _vkRequest.Dispath<VkResponse<DeleteFriendData>>(
+            return await _vkRequest.Dispath<VkResponse<DeleteFriendData>>(
                 new DeleteFriend(
                     AccessToken: AuthData.AccessToken,
                     UserID: User.ID
                 ));
-
-            return result?.Response;
         }
 
         /// <summary>
@@ -107,9 +99,9 @@ namespace VkApiSDK.Friends
         /// <param name="Offset">Cмещение, необходимое для выборки определенного подмножества заявок на добавление в друзья.</param>
         /// <param name="Count">Максимальное количество заявок на добавление в друзья, которые необходимо получить</param>
         /// <returns></returns>
-        public async Task<User[]> GetRequests(bool Out = false, bool NeedViewed = false, int Offset = 0, int Count = 100)
+        public async Task<VkResponse<ArrayResponse<User>>> GetRequests(bool Out = false, bool NeedViewed = false, int Offset = 0, int Count = 100)
         {
-            var result = await _vkRequest.Dispath<VkResponse<ArrayResponse<User>>>(
+            return await _vkRequest.Dispath<VkResponse<ArrayResponse<User>>>(
                 new GetRequests(
                     AccessToken: AuthData.AccessToken,
                     Out: Out,
@@ -117,8 +109,6 @@ namespace VkApiSDK.Friends
                     Count: Count,
                     Offset: Offset
                 ));
-
-            return result?.Response.Items;
         }
     }
 }

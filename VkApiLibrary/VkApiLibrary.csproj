@@ -48,6 +48,7 @@
     <Compile Include="Friends\Methods\DeleteFriend.cs" />
     <Compile Include="Friends\Methods\GetRequests.cs" />
     <Compile Include="Messages\ActivityType.cs" />
+    <Compile Include="Messages\Methods\MarkAsImportant.cs" />
     <Compile Include="Models\Account\BannedData.cs" />
     <Compile Include="Models\Account\CountersData.cs" />
     <Compile Include="Models\Attachments\Poll.cs" />

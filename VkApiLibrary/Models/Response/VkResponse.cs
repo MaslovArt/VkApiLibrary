@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using VkApiSDK.Abstraction;
+using VkApiSDK.Models.Errors;
 
 namespace VkApiSDK.Models.Response
 {
@@ -8,9 +10,13 @@ namespace VkApiSDK.Models.Response
         [JsonProperty("response")]
         public T Response { get; set; }
 
-        public bool IsResultNull()
+        public Error Error { get; set; }
+
+        public bool IsSucceed => Response != null;
+
+        public void SetError(Error Error)
         {
-            return Response == null;
+            this.Error = Error;
         }
     }
 }

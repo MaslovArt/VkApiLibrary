@@ -31,16 +31,14 @@ namespace VkApiSDK.Messages
         /// <param name="count">Кол-во диалогов в запросе</param>
         /// <param name="offset">Смещение для получения данных</param>
         /// <returns></returns>
-        public async Task<DialogsData> GetDialogsAsync(int count = 20, int offset = 0)
+        public async Task<VkResponse<DialogsData>> GetDialogsAsync(int count = 20, int offset = 0)
         {
-            var result = await _vkRequest.Dispath<VkResponse<DialogsData>>(
+            return await _vkRequest.Dispath<VkResponse<DialogsData>>(
                 new GetConversations(
                     AccessToken: AuthData.AccessToken,
                     Offset: offset,
                     Count: count
                 ));
-
-            return result?.Response;
         }
 
         /// <summary>
@@ -49,14 +47,14 @@ namespace VkApiSDK.Messages
         /// <param name="peer">Идентификатор назначения</param>
         /// <param name="message">Текст</param>
         /// <returns></returns>
-        public async Task<int> SendMessage(Peer peer, string message, IEnumerable<VkMessage> FwdMessages = null, 
+        public async Task<VkResponse<int>> SendMessage(Peer peer, string message, IEnumerable<VkMessage> FwdMessages = null, 
             IEnumerable<BaseAttachment> Attachments = null, VkMessage ReplyTo = null)
         {
             var attachment = "";
             if (Attachments != null)
                 attachment = string.Join(",", Attachments.Select(a => a.ToString()));
 
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new SendMessage(
                     AccessToken: AuthData.AccessToken,
                     PeerID: ConvertIDIfChat(peer),
@@ -65,8 +63,6 @@ namespace VkApiSDK.Messages
                     ReplyTo: ReplyTo?.ID,
                     Attachments: attachment
                 ));
-
-            return result != null ? result.Response : -1;
         }
 
         /// <summary>
@@ -75,16 +71,14 @@ namespace VkApiSDK.Messages
         /// <param name="MessageIDs">ID сообщений</param>
         /// <param name="DeleteForAll">Удалять для всех</param>
         /// <returns></returns>
-        public async Task<Dictionary<string, int>> DeleteMessage(IEnumerable<VkMessage> Messages, bool DeleteForAll = true)
+        public async Task<VkResponse<Dictionary<string, int>>> DeleteMessage(IEnumerable<VkMessage> Messages, bool DeleteForAll = true)
         {
-            var result = await _vkRequest.Dispath<VkResponse<Dictionary<string, int>>>(
+            return await _vkRequest.Dispath<VkResponse<Dictionary<string, int>>>(
                 new DeleteMessage(
                     AccessToken: AuthData.AccessToken,
                     MessageIDs: Messages.Select(m => m.ID),
                     DeleteForAll: DeleteForAll
                 ));
-
-            return result?.Response;
         }
 
         /// <summary>
@@ -95,9 +89,9 @@ namespace VkApiSDK.Messages
         /// <param name="newText">Текст сообщения</param>
         /// <param name="attachments">Приложения</param>
         /// <returns></returns>
-        public async Task<bool> EditMessage(Peer peer, VkMessage editMessage, string newText, string attachments = "")
+        public async Task<VkResponse<int>> EditMessage(Peer peer, VkMessage editMessage, string newText, string attachments = "")
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new EditMessage(
                     AccessToken: AuthData.AccessToken,
                     PeerID: peer.ID,
@@ -105,8 +99,6 @@ namespace VkApiSDK.Messages
                     Message: newText,
                     Attachments: attachments
                 ));
-
-            return result != null;
         }
 
         /// <summary>
@@ -115,16 +107,14 @@ namespace VkApiSDK.Messages
         /// <param name="peer">Идентификатор назначения</param>
         /// <param name="pinMessage">Сообщение для закрепления</param>
         /// <returns></returns>
-        public async Task<bool> PinMessage(Peer peer, VkMessage pinMessage)
+        public async Task<VkResponse<object>> PinMessage(Peer peer, VkMessage pinMessage)
         {
-            var result = await _vkRequest.Dispath<VkResponse<object>>(
+            return await _vkRequest.Dispath<VkResponse<object>>(
                 new PinMessage(
                     AccessToken: AuthData.AccessToken,
                     PeerID: ConvertIDIfChat(peer),
                     MessageID: pinMessage.ID
                 ));
-
-            return result != null;
         }
 
         /// <summary>
@@ -132,15 +122,13 @@ namespace VkApiSDK.Messages
         /// </summary>
         /// <param name="peer">Идентификатор назначения</param>
         /// <returns></returns>
-        public async Task<bool> UnpinMessage(Peer peer)
+        public async Task<VkResponse<int>> UnpinMessage(Peer peer)
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new UnpinMesaage(
                     AccessToken: AuthData.AccessToken,
                     PeerID: ConvertIDIfChat(peer)
                 ));
-
-            return result == null ? false : result.Response == 1;
         }
 
         /// <summary>
@@ -148,16 +136,14 @@ namespace VkApiSDK.Messages
         /// </summary>
         /// <param name="fromMessage">Сообщение, начиная с которого пометить как прочитанные</param>
         /// <returns></returns>
-        public async Task<bool> MarkAsRead(VkMessage fromMessage)
+        public async Task<VkResponse<int>> MarkAsRead(VkMessage fromMessage)
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new MarkAsRead(
                     AccessToken: AuthData.AccessToken,
                     PeerID: fromMessage.PeerID,
                     StartMessageID: fromMessage.ID
                 ));
-
-            return result == null ? false : result.Response == 1;
         }
 
         /// <summary>
@@ -166,16 +152,14 @@ namespace VkApiSDK.Messages
         /// <param name="peer">Идентификатор назначения</param>
         /// <param name="activityType">Тип набора сообщения</param>
         /// <returns></returns>
-        public async Task<bool> SetActivity(Peer peer, string activityType)
+        public async Task<VkResponse<int>> SetActivity(Peer peer, string activityType)
         {
-            var result = await _vkRequest.Dispath<VkResponse<int>>(
+            return await _vkRequest.Dispath<VkResponse<int>>(
                 new SetActivity(
                     AccessToken: AuthData.AccessToken,
                     PeerID: peer.ID,
                     Type: activityType
                 ));
-
-            return result != null;
         }
 
         /// <summary>
@@ -187,9 +171,9 @@ namespace VkApiSDK.Messages
         /// <param name="startMessageID">Начиная с какого получать</param>
         /// <param name="fields">Дополнительные поля</param>
         /// <returns></returns>
-        public async Task<VkMessage[]> GetDialogHistory(Peer peer, int count = 20, int offset = 0, int startMessageID = -1, IEnumerable<string> fields = null)
+        public async Task<VkResponse<ArrayResponse<VkMessage>>> GetDialogHistory(Peer peer, int count = 20, int offset = 0, int startMessageID = -1, IEnumerable<string> fields = null)
         {
-            var result = await _vkRequest.Dispath<VkResponse<ArrayResponse<VkMessage>>>(
+            return await _vkRequest.Dispath<VkResponse<ArrayResponse<VkMessage>>>(
                 new GetDialogHistory(
                     AccessToken: AuthData.AccessToken,
                     PeerID: ConvertIDIfChat(peer),
@@ -198,8 +182,6 @@ namespace VkApiSDK.Messages
                     StartMessageID: startMessageID,
                     Fields: fields
                 ));
-
-            return result?.Response.Items;
         }
 
         /// <summary>
@@ -211,9 +193,9 @@ namespace VkApiSDK.Messages
         /// <param name="photoSizes">Возвращать фото в спиц формате</param>
         /// <param name="fields">Дополнительные поля</param>
         /// <returns></returns>
-        public async Task<AttachmentData> GetDialogAttachment(Peer peer, string mediaType, string startFrom, int count = 10, bool photoSizes = false, IEnumerable<string> fields = null)
+        public async Task<VkResponse<AttachmentData>> GetDialogAttachment(Peer peer, string mediaType, string startFrom, int count = 10, bool photoSizes = false, IEnumerable<string> fields = null)
         {
-            var result = await _vkRequest.Dispath<VkResponse<AttachmentData>>(
+            return await _vkRequest.Dispath<VkResponse<AttachmentData>>(
                 new GetHistoryAttachments(
                     AccessToken: AuthData.AccessToken,
                     PeerID: peer.ID,
@@ -223,8 +205,6 @@ namespace VkApiSDK.Messages
                     PhotoSizes: photoSizes,
                     Fields: fields
                 ));
-
-            return result?.Response;
         }
 
         /// <summary>
@@ -238,7 +218,7 @@ namespace VkApiSDK.Messages
             if (result == null)
                 return false;
 
-            var deleteCallNumber = Math.Ceiling(result.Length / 10000d);
+            var deleteCallNumber = Math.Ceiling(result.Response.Count / 10000d);
             //var deleteResponse = 0;
 
             for (int i = 0; i < deleteCallNumber; i++)
@@ -252,6 +232,22 @@ namespace VkApiSDK.Messages
                     return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Помечает сообщения как важные либо снимает отметку.
+        /// </summary>
+        /// <param name="Messages">Сообщения</param>
+        /// <param name="Important">Отметить важными</param>
+        /// <returns></returns>
+        public async Task<VkResponse<int[]>> MarkAsImportant(IEnumerable<VkMessage> Messages, bool Important = true)
+        {
+            return await _vkRequest.Dispath<VkResponse<int[]>>(
+                new MarkAsImportant(
+                    AccessToken: AuthData.AccessToken,
+                    MessageIDs: Messages.Select(m => m.ID),
+                    Important: Important
+                ));
         }
 
         #region Private methods

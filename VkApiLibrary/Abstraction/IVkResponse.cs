@@ -1,7 +1,11 @@
-﻿namespace VkApiSDK.Abstraction
+﻿using VkApiSDK.Models.Errors;
+
+namespace VkApiSDK.Abstraction
 {
-    interface IVkResponse
+    public interface IVkResponse
     {
-        bool IsResultNull();
+        bool IsSucceed { get; }
+
+        void SetError(Error Error);
     }
 }
