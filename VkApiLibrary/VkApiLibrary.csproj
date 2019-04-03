@@ -41,6 +41,7 @@
     <Compile Include="Account\Methods\GetBanned.cs" />
     <Compile Include="Account\Methods\GetCounters.cs" />
     <Compile Include="Account\Methods\UnBan.cs" />
+    <Compile Include="ApiBuilder\VkApiBuiler.cs" />
     <Compile Include="Auth\AuthData.cs" />
     <Compile Include="Auth\VkAutharization.cs" />
     <Compile Include="Friends\Methods\AddFriend.cs" />
@@ -124,20 +125,22 @@
     <Compile Include="Users\Methods\GetUsers.cs" />
     <Compile Include="Models\Users\LastOnline.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Utils\ILogger.cs" />
     <Compile Include="Utils\JsonPathConverter.cs" />
     <Compile Include="Utils\VkDateTime.cs" />
+    <Compile Include="Utils\VkLogger.cs" />
     <Compile Include="VkApi.cs" />
     <Compile Include="Auth\VkPermissions.cs" />
     <Compile Include="Account\Methods\GetProfileInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="packages.config" />
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\VkWatch\packages\Newtonsoft.Json.12.0.1\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
-    </Reference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

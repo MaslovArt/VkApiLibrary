@@ -1,5 +1,4 @@
 ﻿using VkApiSDK.Abstraction;
-using VkApiSDK.Requests;
 using VkApiSDK.Friends;
 using VkApiSDK.Users;
 using VkApiSDK.Messages;
@@ -13,6 +12,7 @@ using VkApiSDK.Models;
 using System.Collections.Generic;
 using System.Linq;
 using VkApiSDK.Models.Response;
+using VkApiSDK.Utils;
 
 namespace VkApiSDK
 {
@@ -28,23 +28,14 @@ namespace VkApiSDK
         /// Инициализирует новый экземпляр класса <c>VkApi</c>
         /// </summary>
         /// <param name="authData">Auth data.</param>
-        private VkApi(AuthData authData)
+        public VkApi(AuthData authData, IVkRequest vkRequest, ILogger logger, int timeout)
         {
             AuthData = authData;
+            this.vkRequest = vkRequest;
+            vkRequest.Logger = logger;
+            vkRequest.Timeout = timeout;
             initApiMethodGroups();
             _vkApi = this;
-        }
-
-        /// <summary>
-        /// Возврашает ссылку на существующий объект VkApi
-        /// </summary>
-        /// <returns></returns>
-        public static VkApi GetInstance(AuthData authData)
-        {
-            if (_vkApi == null)
-                return new VkApi(authData);
-
-            return _vkApi;
         }
 
         #region Properties
@@ -178,7 +169,6 @@ namespace VkApiSDK
 
         private void initApiMethodGroups()
         {
-            vkRequest = new VkRequest();
             Friends = new FriendMethods(AuthData, vkRequest);
             Users = new UserMethods(AuthData, vkRequest);
             Messages = new MessageMethods(AuthData, vkRequest);
