@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace VkApiSDK
+namespace VkApiSDK.Auth
 {
     public class AuthData
     {

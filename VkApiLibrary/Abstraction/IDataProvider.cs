@@ -1,9 +1,11 @@
 ﻿namespace VkApiSDK.Abstraction
 {
-    public interface IDataProvider
+    public interface IDataProvider<T>
     {
-        bool SaveObject<T>(T Obj, string Name);
+        bool SaveObject(T Obj, string Name);
 
-        bool LoadObject<T>(out T obj, string Name);
+        bool LoadObject(out T obj, string Name);
+
+        bool DeleteObject(string Name);
     }
 }

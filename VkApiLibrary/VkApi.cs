@@ -6,7 +6,7 @@ using VkApiSDK.Messages;
 using VkApiSDK.LongPoll;
 using VkApiSDK.Account;
 using VkApiSDK.Polls;
-using System;
+using VkApiSDK.Auth;
 using System.Threading.Tasks;
 using VkApiSDK.Models.Messages;
 using VkApiSDK.Models;
@@ -23,20 +23,15 @@ namespace VkApiSDK
     {
         private IVkRequest vkRequest;
         private static VkApi _vkApi;
-        private IDataProvider dataProvider;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <c>VkApi</c>
         /// </summary>
-        /// <param name="AppID">ID приложения</param>
-        /// <param name="Scope">Список разрешений</param>
-        /// <param name="DataProvider">Объект для сохранения данных авторизации</param>
-        public VkApi(string AppID, string Scope, IDataProvider DataProvider = null)
+        /// <param name="authData">Auth data.</param>
+        private VkApi(AuthData authData)
         {
-            this.AppID = AppID;
-            this.Scope = Scope;
-            this.dataProvider = DataProvider;
-
+            AuthData = authData;
+            initApiMethodGroups();
             _vkApi = this;
         }
 
@@ -44,8 +39,11 @@ namespace VkApiSDK
         /// Возврашает ссылку на существующий объект VkApi
         /// </summary>
         /// <returns></returns>
-        public VkApi GetInstance()
+        public static VkApi GetInstance(AuthData authData)
         {
+            if (_vkApi == null)
+                return new VkApi(authData);
+
             return _vkApi;
         }
 
@@ -69,27 +67,6 @@ namespace VkApiSDK
         #endregion
 
         #region VkApi
-
-        /// <summary>
-        /// Выполняет авторизацию
-        /// </summary>
-        /// <param name="AuthMethod">Метод для открытия страницы авторизации</param>
-        /// <param name="TryGetTokenFromMemory">Загрузить токен из памяти</param>
-        /// <returns></returns>
-        public bool Auth(Func<string, AuthData> AuthMethod, bool TryGetTokenFromMemory = true)
-        {
-            VkAutharization auth = new VkAutharization(AppID, Scope, dataProvider);
-
-            if(TryGetTokenFromMemory)
-                AuthData = auth.TryGetAuthFromMemory();
-            if (AuthData != null)
-                return true;
-
-            AuthData = auth.Auth(AuthMethod);
-            initApiMethodGroups();
-
-            return AuthData != null;
-        }
 
         /// <summary>
         /// Методы для работы с друзьями

@@ -1,31 +1,33 @@
 ﻿using System;
+using System.Threading.Tasks;
 using VkApiSDK.Abstraction;
+using Newtonsoft.Json;
 
-namespace VkApiSDK
+namespace VkApiSDK.Auth
 {
     public class VkAutharization
     {
-        private const string AUTH_URL = "https://oauth.vk.com/authorize?client_id={0}&display=page&redirect_uri=https://oauth.vk.com/blank.html&display=page&scope={1}&response_type=token&v=5.92";
-        private const string AUTH_DATA_PATH = "authdata";
-        private IDataProvider DataProvider;
+        private const string authUrl = "https://oauth.vk.com/authorize";
+        private const string redirectUrl = "https://oauth.vk.com/blank.html";
+        private IDataProvider<string> dataProvider;
+        private string authDataPath = "authData.dat";
 
         /// <summary>
         /// Конструктор
         /// </summary>
         /// <param name="AppID">ID вк приложения</param>
         /// <param name="Scope">Список разрещений.</param>
-        /// <param name="DataProvider">Способ сохранения информации.</param>
-        public VkAutharization(string AppID, string Scope, IDataProvider DataProvider = null)
+        public VkAutharization(string AppID, string Scope, IDataProvider<string> dataProvider)
         {
             this.AppID = AppID;
             this.Scope = Scope;
-            this.DataProvider = DataProvider;
+            this.dataProvider = dataProvider;
         }
 
         /// <summary>
         /// Данные для доступа к апи
         /// </summary>
-        public AuthData AuthData { get; private set; }
+        public AuthData AuthData { get; set; }
 
         /// <summary>
         /// ID приложения Вк
@@ -41,35 +43,36 @@ namespace VkApiSDK
         /// Выполняет авторизацию
         /// </summary>
         /// <param name="AuthMethod">Метод, который осуществляет переход по ссылке для подтверждения доступа к аккаунту</param>
-        /// <returns>Токен</returns>
-        public AuthData Auth(Func<string, AuthData> AuthMethod)
+        public void Auth(Func<string, string, string, string, AuthData> AuthMethod)
         {
-            AuthData = AuthMethod(string.Format(AUTH_URL, AppID, Scope));
-
-            if (DataProvider != null && AuthData != null)
-                DataProvider.SaveObject(AuthData, AUTH_DATA_PATH);
-
-            return AuthData;
+             AuthData = AuthMethod(AppID, Scope, authUrl, redirectUrl);
         }
 
-        /// <summary>
-        /// Пытается получить токен доступа из памяти
-        /// </summary>
-        /// <returns>Токен</returns>
-        public AuthData TryGetAuthFromMemory()
+        public bool SaveToken()
         {
-            if (DataProvider == null) return null;
+            if (AuthData == null)
+                return false;
 
-            AuthData ad;
-            bool isLoad = DataProvider.LoadObject(out ad, AUTH_DATA_PATH);
+            var authDataJson = JsonConvert.SerializeObject(AuthData);
+            return dataProvider.SaveObject(authDataJson, authDataPath);
+        }
 
-            if(isLoad)
+        public  AuthData TryGetToken()
+        {
+            string authDataJson;
+
+            if(dataProvider.LoadObject(out authDataJson, authDataPath))
             {
-                AuthData = ad;
-                return AuthData;
+                var authData = JsonConvert.DeserializeObject<AuthData>(authDataJson);
+                return authData;
             }
 
             return null;
+        }
+
+        public bool DeleteToken()
+        {
+            return dataProvider.DeleteObject(authDataPath);
         }
     }
 }

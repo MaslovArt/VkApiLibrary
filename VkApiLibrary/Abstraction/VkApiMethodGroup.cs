@@ -1,4 +1,5 @@
 ﻿using VkApiSDK.Requests;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.Abstraction
 {

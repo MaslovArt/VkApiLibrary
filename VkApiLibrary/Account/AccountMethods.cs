@@ -5,6 +5,7 @@ using VkApiSDK.Models.Response;
 using VkApiSDK.Account.Methods;
 using VkApiSDK.Models.Account;
 using System.Collections.Generic;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.Account
 {
@@ -77,6 +78,18 @@ namespace VkApiSDK.Account
                 new GetCounters(
                     AccessToken: AuthData.AccessToken,
                     Filters: Filters
+                ));
+        }
+
+        /// <summary>
+        /// Возвращает информацию о текущем профиле.
+        /// </summary>
+        /// <returns>The profile info.</returns>
+        public async Task<VkResponse<User>> GetProfileInfo()
+        {
+            return await _vkRequest.Dispath<VkResponse<User>>(
+                new GetProfileInfo(
+                    AccessToken: AuthData.AccessToken
                 ));
         }
     }

@@ -26,7 +26,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -120,7 +119,6 @@
     <Compile Include="Requests\ExtraField.cs" />
     <Compile Include="Requests\Attributes\RequestParameter.cs" />
     <Compile Include="Abstraction\VkApiMethod.cs" />
-    <Compile Include="Requests\VkPermissions.cs" />
     <Compile Include="Requests\VkRequest.cs" />
     <Compile Include="Models\Response\VkResponse.cs" />
     <Compile Include="Users\Methods\GetUsers.cs" />
@@ -129,17 +127,18 @@
     <Compile Include="Utils\JsonPathConverter.cs" />
     <Compile Include="Utils\VkDateTime.cs" />
     <Compile Include="VkApi.cs" />
+    <Compile Include="Auth\VkPermissions.cs" />
+    <Compile Include="Account\Methods\GetProfileInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\VkWatch\packages\Newtonsoft.Json.12.0.1\lib\portable-net45+win8+wp8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

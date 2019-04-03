@@ -5,6 +5,7 @@ using VkApiSDK.Abstraction;
 using VkApiSDK.Messages.Methods;
 using VkApiSDK.Models;
 using VkApiSDK.Models.Response;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.Messages
 {

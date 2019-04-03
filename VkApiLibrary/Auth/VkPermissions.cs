@@ -1,4 +1,4 @@
-﻿namespace VkApiSDK.Requests
+﻿namespace VkApiSDK.Auth
 {
     /// <summary>
     /// Список названий прав доступа, которые необходимы приложению.
@@ -12,7 +12,7 @@
         /// <summary>
         /// Доступ к друзьям.
         /// </summary>
-        public const string Friends = "friends ";
+        public const string Friends = "friends";
         /// <summary>
         /// Доступ к фотографиям.
         /// </summary>

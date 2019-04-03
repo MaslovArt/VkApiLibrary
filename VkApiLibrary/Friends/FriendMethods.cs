@@ -5,6 +5,7 @@ using VkApiSDK.Models;
 using VkApiSDK.Models.Friends;
 using VkApiSDK.Models.Response;
 using VkApiSDK.Requests;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.Friends
 {

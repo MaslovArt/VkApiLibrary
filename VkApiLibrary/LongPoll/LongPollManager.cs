@@ -8,6 +8,7 @@ using static System.Convert;
 using VkApiSDK.Models.LongPoll;
 using VkApiSDK.LongPoll.Methods;
 using VkApiSDK.Abstraction;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.LongPoll
 {
@@ -25,7 +26,7 @@ namespace VkApiSDK.LongPoll
         /// <summary>
         /// Инициализирует новый экземпляр класса <c>LongPollManager</c>
         /// </summary>
-        /// <param name="aData">Данные для доступа к апи</param>
+        /// <param name="AuthData">Данные для доступа к апи</param>
         public LongPollManager(AuthData AuthData, IVkRequest VkRequest = null)
             :base(AuthData, VkRequest)
         {

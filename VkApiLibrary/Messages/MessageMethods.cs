@@ -8,6 +8,7 @@ using VkApiSDK.Models.Messages;
 using VkApiSDK.Models;
 using VkApiSDK.Models.Attachments;
 using VkApiSDK.Models.Response;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.Messages
 {
@@ -68,7 +69,7 @@ namespace VkApiSDK.Messages
         /// <summary>
         /// Удаляет сообщение
         /// </summary>
-        /// <param name="MessageIDs">ID сообщений</param>
+        /// <param name="Messages">Сообщения</param>
         /// <param name="DeleteForAll">Удалять для всех</param>
         /// <returns></returns>
         public async Task<VkResponse<Dictionary<string, int>>> DeleteMessage(IEnumerable<VkMessage> Messages, bool DeleteForAll = true)

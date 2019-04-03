@@ -6,6 +6,7 @@ using VkApiSDK.Models.Attachments;
 using VkApiSDK.Polls.Methods;
 using VkApiSDK.Models.Response;
 using VkApiSDK.Models.Polls;
+using VkApiSDK.Auth;
 
 namespace VkApiSDK.Polls
 {
@@ -44,7 +45,7 @@ namespace VkApiSDK.Polls
         /// Удаляет голос
         /// </summary>
         /// <param name="Poll">Опрос</param>
-        /// <param name="Answers">Ответ для отмены</param>
+        /// <param name="Answer">Ответ для отмены</param>
         /// <returns></returns>
         public async Task<VkResponse<int>> DeleteVote(Poll Poll, VoteAnswer Answer)
         {
